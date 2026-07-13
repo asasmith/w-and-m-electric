@@ -1,0 +1,27 @@
+.DS_Store
+node_modules
+.pnpm-store
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# next
+.next
+out
+
+# netlify
+.netlify
+
+# coverage and test outputs
+coverage
+playwright-report
+test-results
+
+# sanity
+.sanity
+dist
+
+# logs
+*.log

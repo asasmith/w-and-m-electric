@@ -1,0 +1,20 @@
+{
+  "name": "@w-and-m-electric/studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "lint": "sanity schemas validate"
+  },
+  "dependencies": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sanity": "^5.4.0",
+    "styled-components": "^6.3.6"
+  },
+  "devDependencies": {
+    "@sanity/vision": "^5.4.0"
+  }
+}

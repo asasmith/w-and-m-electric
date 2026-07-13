@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --ink: #14120f;
+  --panel: #1f1c18;
+  --paper: #f3eee4;
+  --copper: #c2570d;
+  --amber: #e8a33d;
+  --volt: #2c4a5e;
+  --steel: #6b645a;
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-paper: var(--paper);
+  --color-copper: var(--copper);
+  --color-amber: var(--amber);
+  --color-volt: var(--volt);
+  --color-steel: var(--steel);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--amber) 65%, black 10%);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.section-notch::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 36px;
+  background: inherit;
+  clip-path: polygon(0 0, calc(100% - 4rem) 0, 100% 100%, 0 100%);
+}
+
+.notched-card {
+  clip-path: polygon(0 0, calc(100% - 1.2rem) 0, 100% 1.2rem, 100% 100%, 0 100%);
+}
+
+.bolt-grid {
+  background-image:
+    linear-gradient(to right, rgb(243 238 228 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(243 238 228 / 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
