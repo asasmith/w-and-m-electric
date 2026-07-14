@@ -15,8 +15,6 @@ function buildDeskStructure(S: StructureBuilder) {
       S.documentTypeListItem("serviceArea").title("Service Areas"),
       S.documentTypeListItem("project").title("Projects"),
       S.documentTypeListItem("testimonial").title("Testimonials"),
-      S.divider(),
-      S.documentTypeListItem("quoteRequest").title("Quote Requests"),
     ]);
 }
 

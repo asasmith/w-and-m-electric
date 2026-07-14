@@ -1,5 +1,4 @@
 import project from "./project";
-import quoteRequest from "./quoteRequest";
 import service from "./service";
 import serviceArea from "./serviceArea";
 import siteSettings from "./siteSettings";
@@ -11,5 +10,4 @@ export const schemaTypes = [
   serviceArea,
   project,
   testimonial,
-  quoteRequest,
 ];

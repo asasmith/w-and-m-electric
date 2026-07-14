@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { QuoteRequestFieldErrors } from "@/lib/quote-request/schema";
 import type { ServiceListItem } from "@/lib/sanity/types";
 
 type QuoteRequestFormProps = {
@@ -20,10 +19,10 @@ type FormState = {
 };
 
 type SubmissionState =
-  | { status: "idle"; message?: string; fieldErrors?: QuoteRequestFieldErrors }
-  | { status: "submitting"; message?: string; fieldErrors?: QuoteRequestFieldErrors }
-  | { status: "success"; message: string; fieldErrors?: QuoteRequestFieldErrors }
-  | { status: "error"; message: string; fieldErrors?: QuoteRequestFieldErrors };
+  | { status: "idle"; message?: string }
+  | { status: "submitting"; message?: string }
+  | { status: "success"; message: string }
+  | { status: "error"; message: string };
 
 const initialFormState: FormState = {
   name: "",
@@ -44,29 +43,40 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
     event.preventDefault();
     setSubmissionState({ status: "submitting" });
 
-    const response = await fetch("/api/quote-request", {
+    const formElement = event.currentTarget;
+    const payload = new FormData();
+
+    payload.append("form-name", "quote-request");
+    payload.append("name", formState.name);
+    payload.append("phone", formState.phone);
+    payload.append("email", formState.email);
+    payload.append("address", formState.address);
+    payload.append("serviceRequested", formState.serviceRequested);
+    payload.append("details", formState.details);
+    payload.append("isEmergency", formState.isEmergency ? "Yes" : "No");
+    payload.append("company", formState.company);
+
+    const response = await fetch("/", {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "content-type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify(formState),
+      body: new URLSearchParams(payload as unknown as URLSearchParams).toString(),
     });
-
-    const payload = (await response.json()) as { message?: string; fieldErrors?: QuoteRequestFieldErrors };
 
     if (!response.ok) {
       setSubmissionState({
         status: "error",
-        message: payload.message || "We could not send your request right now.",
-        fieldErrors: payload.fieldErrors,
+        message: "We could not send your request right now. Please call or email us directly.",
       });
       return;
     }
 
+    formElement.reset();
     setFormState(initialFormState);
     setSubmissionState({
       status: "success",
-      message: payload.message || "Your request has been sent.",
+      message: "Your request has been sent. We will follow up shortly.",
     });
   }
 
@@ -80,41 +90,41 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
   const statusMessageId = "quote-request-status";
 
   return (
-    <form aria-describedby={statusMessageId} className="notched-card border border-paper/12 bg-panel p-6 text-paper" noValidate onSubmit={handleSubmit}>
+    <form
+      aria-describedby={statusMessageId}
+      className="notched-card border border-paper/12 bg-panel p-6 text-paper"
+      data-netlify="true"
+      data-netlify-honeypot="company"
+      name="quote-request"
+      onSubmit={handleSubmit}
+    >
+      <input name="form-name" type="hidden" value="quote-request" />
       <div className="grid gap-5 md:grid-cols-2">
         <label className="block">
           <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Name</span>
           <input
-            aria-describedby={submissionState.fieldErrors?.name ? "quote-request-name-error" : undefined}
-            aria-invalid={submissionState.fieldErrors?.name ? true : undefined}
             className="mt-2 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
             name="name"
             onChange={(event) => updateField("name", event.target.value)}
             required
             value={formState.name}
           />
-          {submissionState.fieldErrors?.name ? <span className="mt-2 block text-sm text-amber" id="quote-request-name-error">{submissionState.fieldErrors.name}</span> : null}
         </label>
 
         <label className="block">
           <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Phone</span>
           <input
-            aria-describedby={submissionState.fieldErrors?.phone ? "quote-request-phone-error" : undefined}
-            aria-invalid={submissionState.fieldErrors?.phone ? true : undefined}
             className="mt-2 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
             name="phone"
             onChange={(event) => updateField("phone", event.target.value)}
             required
             value={formState.phone}
           />
-          {submissionState.fieldErrors?.phone ? <span className="mt-2 block text-sm text-amber" id="quote-request-phone-error">{submissionState.fieldErrors.phone}</span> : null}
         </label>
 
         <label className="block">
           <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Email</span>
           <input
-            aria-describedby={submissionState.fieldErrors?.email ? "quote-request-email-error" : undefined}
-            aria-invalid={submissionState.fieldErrors?.email ? true : undefined}
             className="mt-2 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
             name="email"
             onChange={(event) => updateField("email", event.target.value)}
@@ -122,14 +132,11 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
             type="email"
             value={formState.email}
           />
-          {submissionState.fieldErrors?.email ? <span className="mt-2 block text-sm text-amber" id="quote-request-email-error">{submissionState.fieldErrors.email}</span> : null}
         </label>
 
         <label className="block">
           <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Service needed</span>
           <select
-            aria-describedby={submissionState.fieldErrors?.serviceRequested ? "quote-request-service-error" : undefined}
-            aria-invalid={submissionState.fieldErrors?.serviceRequested ? true : undefined}
             className="mt-2 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
             name="serviceRequested"
             onChange={(event) => updateField("serviceRequested", event.target.value)}
@@ -143,36 +150,29 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
               </option>
             ))}
           </select>
-          {submissionState.fieldErrors?.serviceRequested ? <span className="mt-2 block text-sm text-amber" id="quote-request-service-error">{submissionState.fieldErrors.serviceRequested}</span> : null}
         </label>
       </div>
 
       <label className="mt-5 block">
         <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Service address</span>
         <input
-          aria-describedby={submissionState.fieldErrors?.address ? "quote-request-address-error" : undefined}
-          aria-invalid={submissionState.fieldErrors?.address ? true : undefined}
           className="mt-2 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
           name="address"
           onChange={(event) => updateField("address", event.target.value)}
           required
           value={formState.address}
         />
-        {submissionState.fieldErrors?.address ? <span className="mt-2 block text-sm text-amber" id="quote-request-address-error">{submissionState.fieldErrors.address}</span> : null}
       </label>
 
       <label className="mt-5 block">
         <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">Project details</span>
         <textarea
-          aria-describedby={submissionState.fieldErrors?.details ? "quote-request-details-error" : undefined}
-          aria-invalid={submissionState.fieldErrors?.details ? true : undefined}
           className="mt-2 min-h-40 w-full border border-steel/35 bg-ink px-4 py-3 text-paper"
           name="details"
           onChange={(event) => updateField("details", event.target.value)}
           required
           value={formState.details}
         />
-        {submissionState.fieldErrors?.details ? <span className="mt-2 block text-sm text-amber" id="quote-request-details-error">{submissionState.fieldErrors.details}</span> : null}
       </label>
 
       <label className="mt-5 block sr-only" htmlFor="company">
