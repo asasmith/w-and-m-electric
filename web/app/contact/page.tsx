@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
 import { fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getServices, getSiteSettings } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
@@ -15,7 +16,11 @@ function toTelHref(phone: string) {
 }
 
 export default async function ContactPage() {
-  const [servicesData, siteSettingsData] = await Promise.all([getServices(), getSiteSettings()]);
+  const isPreview = await isPreviewEnabled();
+  const [servicesData, siteSettingsData] = await Promise.all([
+    getServices({ preview: isPreview }),
+    getSiteSettings({ preview: isPreview }),
+  ]);
   const services = servicesData.length ? servicesData : fallbackServices;
   const siteSettings = siteSettingsData ?? fallbackSiteSettings;
 

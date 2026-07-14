@@ -3,7 +3,9 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import EmergencyBanner from "@/components/EmergencyBanner";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import PreviewBanner from "@/components/PreviewBanner";
 import { fallbackSiteSettings } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getSiteSettings } from "@/lib/sanity/queries";
 import "./globals.css";
 
@@ -32,10 +34,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isPreview = await isPreviewEnabled();
   let siteSettings = fallbackSiteSettings;
 
   try {
-    siteSettings = (await getSiteSettings()) ?? fallbackSiteSettings;
+    siteSettings = (await getSiteSettings({ preview: isPreview })) ?? fallbackSiteSettings;
   } catch {
     siteSettings = fallbackSiteSettings;
   }
@@ -43,6 +46,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>
+        <PreviewBanner isPreview={isPreview} />
         <EmergencyBanner enabled={Boolean(siteSettings.emergencyAvailable)} phone={siteSettings.phone} />
         <Navigation companyName={siteSettings.companyName} phone={siteSettings.phone} />
         <main>{children}</main>

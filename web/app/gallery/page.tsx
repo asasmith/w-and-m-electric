@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { fallbackProjects } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getProjects } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function GalleryPage() {
-  const projectsData = await getProjects();
+  const isPreview = await isPreviewEnabled();
+  const projectsData = await getProjects({ preview: isPreview });
   const projects = projectsData.length ? projectsData : fallbackProjects;
 
   return (

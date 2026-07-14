@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fallbackProjects, fallbackServiceAreaDetails, fallbackTestimonials, getFallbackServiceAreaBySlug } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getProjects, getServiceAreaBySlug, getServiceAreaSlugs, getTestimonials } from "@/lib/sanity/queries";
 
 type ServiceAreaDetailPageProps = {
@@ -38,10 +39,11 @@ export async function generateMetadata({ params }: ServiceAreaDetailPageProps): 
 
 export default async function ServiceAreaDetailPage({ params }: ServiceAreaDetailPageProps) {
   const { slug } = await params;
+  const isPreview = await isPreviewEnabled();
   const [serviceAreaData, projectsData, testimonialsData] = await Promise.all([
-    getServiceAreaBySlug(slug),
-    getProjects(),
-    getTestimonials(),
+    getServiceAreaBySlug(slug, { preview: isPreview }),
+    getProjects({ preview: isPreview }),
+    getTestimonials({ preview: isPreview }),
   ]);
 
   const serviceArea = serviceAreaData ?? getFallbackServiceAreaBySlug(slug);

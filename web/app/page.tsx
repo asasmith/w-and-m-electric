@@ -8,6 +8,7 @@ import {
   fallbackSiteSettings,
   fallbackTestimonials,
 } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import {
   getProjects,
   getServiceAreas,
@@ -28,6 +29,7 @@ function toTelHref(phone: string) {
 }
 
 export default async function HomePage() {
+  const isPreview = await isPreviewEnabled();
   let siteSettings = fallbackSiteSettings;
   let services = fallbackServices;
   let serviceAreas = fallbackServiceAreas;
@@ -36,11 +38,11 @@ export default async function HomePage() {
 
   try {
     const [settingsData, servicesData, areasData, projectsData, testimonialsData] = await Promise.all([
-      getSiteSettings(),
-      getServices(),
-      getServiceAreas(),
-      getProjects(),
-      getTestimonials(),
+      getSiteSettings({ preview: isPreview }),
+      getServices({ preview: isPreview }),
+      getServiceAreas({ preview: isPreview }),
+      getProjects({ preview: isPreview }),
+      getTestimonials({ preview: isPreview }),
     ]);
 
     siteSettings = settingsData ?? fallbackSiteSettings;

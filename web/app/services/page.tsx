@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getServices, getSiteSettings } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
@@ -10,7 +11,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const [servicesData, siteSettingsData] = await Promise.all([getServices(), getSiteSettings()]);
+  const isPreview = await isPreviewEnabled();
+  const [servicesData, siteSettingsData] = await Promise.all([
+    getServices({ preview: isPreview }),
+    getSiteSettings({ preview: isPreview }),
+  ]);
   const services = servicesData.length ? servicesData : fallbackServices;
   const siteSettings = siteSettingsData ?? fallbackSiteSettings;
 

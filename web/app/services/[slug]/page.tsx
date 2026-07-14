@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PortableText from "@/components/PortableText";
 import { fallbackProjects, fallbackServiceDetails, fallbackTestimonials, getFallbackServiceBySlug } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getProjects, getServiceBySlug, getServiceSlugs, getTestimonials } from "@/lib/sanity/queries";
 
 type ServiceDetailPageProps = {
@@ -39,10 +40,11 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
 
 export default async function ServiceDetailPage({ params }: ServiceDetailPageProps) {
   const { slug } = await params;
+  const isPreview = await isPreviewEnabled();
   const [serviceData, projectsData, testimonialsData] = await Promise.all([
-    getServiceBySlug(slug),
-    getProjects(),
-    getTestimonials(),
+    getServiceBySlug(slug, { preview: isPreview }),
+    getProjects({ preview: isPreview }),
+    getTestimonials({ preview: isPreview }),
   ]);
 
   const service = serviceData ?? getFallbackServiceBySlug(slug);

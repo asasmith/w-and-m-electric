@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ServiceAreaCoverageMap from "@/components/ServiceAreaCoverageMap";
 import { fallbackServiceAreas, fallbackSiteSettings } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getServiceAreas, getSiteSettings } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ServiceAreasPage() {
-  const [serviceAreasData, siteSettingsData] = await Promise.all([getServiceAreas(), getSiteSettings()]);
+  const isPreview = await isPreviewEnabled();
+  const [serviceAreasData, siteSettingsData] = await Promise.all([
+    getServiceAreas({ preview: isPreview }),
+    getSiteSettings({ preview: isPreview }),
+  ]);
   const serviceAreas = serviceAreasData.length ? serviceAreasData : fallbackServiceAreas;
   const siteSettings = siteSettingsData ?? fallbackSiteSettings;
 

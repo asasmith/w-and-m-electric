@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { fallbackSiteSettings, fallbackTestimonials } from "@/lib/placeholders";
+import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getSiteSettings, getTestimonials } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
@@ -10,7 +11,11 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [siteSettingsData, testimonialsData] = await Promise.all([getSiteSettings(), getTestimonials()]);
+  const isPreview = await isPreviewEnabled();
+  const [siteSettingsData, testimonialsData] = await Promise.all([
+    getSiteSettings({ preview: isPreview }),
+    getTestimonials({ preview: isPreview }),
+  ]);
   const siteSettings = siteSettingsData ?? fallbackSiteSettings;
   const testimonials = testimonialsData.length ? testimonialsData : fallbackTestimonials;
 
