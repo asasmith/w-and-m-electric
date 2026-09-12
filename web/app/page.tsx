@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SanityImage from "@/components/SanityImage";
 import ServiceAreaCoverageMap from "@/components/ServiceAreaCoverageMap";
 import {
   fallbackProjects,
@@ -174,29 +175,27 @@ export default async function HomePage() {
           <div className="flex items-end justify-between gap-8">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Proof in the work</p>
-              <h2 className="mt-4 font-display text-5xl uppercase leading-none">Before and after improvements, without the fluff.</h2>
+              <h2 className="mt-4 font-display text-5xl uppercase leading-none">Project work, documented without the fluff.</h2>
             </div>
             <Link className="hidden font-mono text-xs uppercase tracking-[0.22em] text-paper/70 transition hover:text-amber md:block" href="/gallery">
               Browse gallery
             </Link>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            {projects.map((project) => (
-              <article key={project._id} className="notched-card border border-paper/12 bg-panel p-6">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="border border-steel/35 bg-gradient-to-br from-steel/18 to-transparent p-4">
-                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-steel">Before</p>
-                    <div className="mt-4 h-44 border border-steel/25 bg-ink/60" />
-                  </div>
-                  <div className="border border-copper/35 bg-gradient-to-br from-copper/20 to-transparent p-4">
-                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-amber">After</p>
-                    <div className="mt-4 h-44 border border-copper/30 bg-paper/8" />
-                  </div>
+           <div className="mt-10 grid gap-6 lg:grid-cols-2">
+             {projects.map((project) => (
+              <Link key={project._id} className="notched-card block overflow-hidden border border-paper/12 bg-panel transition hover:border-amber" href={`/gallery/${project.slug.current}`}>
+                <div className="relative aspect-[16/10] border-b border-paper/12 bg-ink/60">
+                  {project.featuredImage?.asset?._id ? (
+                    <SanityImage image={project.featuredImage} fill className="object-cover" sizes="(min-width: 1024px) 44vw, 100vw" />
+                  ) : null}
                 </div>
-                <h3 className="mt-6 font-display text-3xl uppercase leading-none">{project.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-paper/76">{project.description}</p>
-              </article>
+                <div className="p-6">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-amber">{project.relatedService.title}</p>
+                  <h3 className="mt-4 font-display text-3xl uppercase leading-none">{project.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-paper/76">{project.description}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

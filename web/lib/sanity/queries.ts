@@ -148,7 +148,7 @@ const projectsQuery = `*[_type == "project"] | order(completedDate desc){
   slug,
   description,
   completedDate,
-  beforeImage{
+  featuredImage{
     asset->{
       _id,
       url,
@@ -158,7 +158,45 @@ const projectsQuery = `*[_type == "project"] | order(completedDate desc){
     },
     alt
   },
-  afterImage{
+  photos[]{
+    asset->{
+      _id,
+      url,
+      metadata {
+        dimensions
+      }
+    },
+    alt
+  },
+  relatedService->{
+    _id,
+    title,
+    slug
+  }
+}`;
+
+const projectSlugsQuery = `*[_type == "project" && defined(slug.current)][]{
+  "slug": slug.current
+}`;
+
+const projectBySlugQuery = `*[_type == "project" && slug.current == $slug][0]{
+  _id,
+  _type,
+  title,
+  slug,
+  description,
+  completedDate,
+  featuredImage{
+    asset->{
+      _id,
+      url,
+      metadata {
+        dimensions
+      }
+    },
+    alt
+  },
+  photos[]{
     asset->{
       _id,
       url,
@@ -266,6 +304,22 @@ export async function getProjects(options?: { preview?: boolean }) {
   }
 
   return getClient(options).fetch<Project[]>(projectsQuery);
+}
+
+export async function getProjectSlugs(options?: { preview?: boolean }) {
+  if (!isSanityConfigured()) {
+    return [];
+  }
+
+  return getClient(options).fetch<Array<{ slug: string }>>(projectSlugsQuery);
+}
+
+export async function getProjectBySlug(slug: string, options?: { preview?: boolean }) {
+  if (!isSanityConfigured()) {
+    return null;
+  }
+
+  return getClient(options).fetch<Project | null>(projectBySlugQuery, { slug });
 }
 
 export async function getTestimonials(options?: { preview?: boolean }) {

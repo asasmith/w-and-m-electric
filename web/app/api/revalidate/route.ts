@@ -21,7 +21,7 @@ function getPathsForPayload(payload: RevalidatePayload) {
     case "serviceArea":
       return slug ? ["/", "/service-areas", `/service-areas/${slug}`] : ["/", "/service-areas"];
     case "project":
-      return ["/", "/gallery"];
+      return slug ? ["/", "/gallery", `/gallery/${slug}`] : ["/", "/gallery"];
     case "testimonial":
       return ["/", "/about", "/services"];
     default:

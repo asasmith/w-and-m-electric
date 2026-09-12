@@ -203,8 +203,12 @@ export const fallbackProjects: Project[] = [
     slug: { current: "ranch-home-panel-refresh" },
     description: "Replaced an overloaded aging panel with a cleaner, labeled setup that supports new kitchen and HVAC loads.",
     completedDate: "2026-05-12",
-    beforeImage: { alt: "Aging electrical panel before replacement" },
-    afterImage: { alt: "Newly organized upgraded electrical panel" },
+    featuredImage: { alt: "Newly organized upgraded electrical panel" },
+    photos: [
+      { alt: "Aging electrical panel before replacement" },
+      { alt: "Newly organized upgraded electrical panel" },
+      { alt: "Closer view of labeled breakers after the panel refresh" },
+    ],
     relatedService: {
       _id: "service-panel-upgrades",
       title: "Panel Upgrades",
@@ -218,8 +222,12 @@ export const fallbackProjects: Project[] = [
     slug: { current: "storefront-lighting-retrofit" },
     description: "Upgraded dated exterior fixtures to brighter LED security lighting with cleaner nighttime coverage.",
     completedDate: "2026-03-21",
-    beforeImage: { alt: "Dark storefront exterior before lighting retrofit" },
-    afterImage: { alt: "Storefront with upgraded LED security lighting" },
+    featuredImage: { alt: "Storefront with upgraded LED security lighting" },
+    photos: [
+      { alt: "Dark storefront exterior before lighting retrofit" },
+      { alt: "Storefront with upgraded LED security lighting" },
+      { alt: "Wide view of the upgraded storefront lighting at dusk" },
+    ],
     relatedService: {
       _id: "service-lighting-installation",
       title: "Lighting Installation",

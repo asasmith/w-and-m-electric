@@ -26,20 +26,27 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "beforeImage",
-      title: "Before Image",
+      name: "featuredImage",
+      title: "Featured Image",
       type: "image",
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Text", type: "string", validation: (rule) => rule.required() })],
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "afterImage",
-      title: "After Image",
-      type: "image",
-      options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string", validation: (rule) => rule.required() })],
-      validation: (rule) => rule.required(),
+      name: "photos",
+      title: "Project Photos",
+      type: "array",
+      of: [
+        defineField({
+          name: "photo",
+          title: "Photo",
+          type: "image",
+          options: { hotspot: true },
+          fields: [defineField({ name: "alt", title: "Alt Text", type: "string", validation: (rule) => rule.required() })],
+        }),
+      ],
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
       name: "description",
@@ -56,6 +63,6 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: "title", subtitle: "relatedService.title", media: "afterImage" },
+    select: { title: "title", subtitle: "relatedService.title", media: "featuredImage" },
   },
 });

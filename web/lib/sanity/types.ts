@@ -86,8 +86,8 @@ export type Project = {
   slug: SanitySlug;
   description: string;
   completedDate: string;
-  beforeImage: SanityImage;
-  afterImage: SanityImage;
+  featuredImage: SanityImage;
+  photos: SanityImage[];
   relatedService: Pick<ServiceListItem, "_id" | "title" | "slug">;
 };
 
