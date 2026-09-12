@@ -55,7 +55,16 @@ export default defineType({
       name: "icon",
       title: "Icon Key",
       type: "string",
-      description: "Short internal key for the service icon, such as panel-upgrade or lighting.",
+      description: "Select the frontend icon mapped to this service.",
+      options: {
+        list: [
+          { title: "Panel Upgrade", value: "panel-upgrade" },
+          { title: "Emergency Repair", value: "emergency-repair" },
+          { title: "Lighting", value: "lighting" },
+          { title: "Commercial", value: "commercial" },
+        ],
+        layout: "dropdown",
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({

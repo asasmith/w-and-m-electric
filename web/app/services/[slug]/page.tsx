@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PortableText from "@/components/PortableText";
+import SanityImage from "@/components/SanityImage";
 import { fallbackProjects, fallbackServiceDetails, fallbackTestimonials, getFallbackServiceBySlug } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getProjects, getServiceBySlug, getServiceSlugs, getTestimonials } from "@/lib/sanity/queries";
@@ -79,6 +80,17 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       <section className="bg-paper text-ink">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-18 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
           <div>
+            {service.featuredImage?.asset?._id ? (
+              <div className="relative mb-8 aspect-[16/10] overflow-hidden border border-steel/35 bg-ink/10">
+                <SanityImage
+                  image={service.featuredImage}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(min-width: 1024px) 52vw, 100vw"
+                />
+              </div>
+            ) : null}
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-copper">What this includes</p>
             <div className="mt-6">
               <PortableText value={service.body} />

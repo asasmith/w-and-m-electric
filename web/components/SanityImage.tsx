@@ -1,9 +1,9 @@
 import { createImageUrlBuilder } from "@sanity/image-url";
 import Image from "next/image";
-import { client } from "@/lib/sanity/client";
+import { imageUrlBuilderConfig } from "@/lib/sanity/client";
 import type { SanityImage as SanityImageType } from "@/lib/sanity/types";
 
-const builder = createImageUrlBuilder(client);
+const builder = createImageUrlBuilder(imageUrlBuilderConfig);
 
 type Props = {
   image: SanityImageType;
@@ -24,7 +24,7 @@ export default function SanityImage({
   sizes,
   fill = false,
 }: Props) {
-  if (!image?.asset?._id) {
+  if (!image?.asset?._id || !imageUrlBuilderConfig.projectId) {
     return null;
   }
 

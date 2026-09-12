@@ -6,6 +6,11 @@ const baseClientConfig = {
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-07-13",
 };
 
+export const imageUrlBuilderConfig = {
+  projectId: baseClientConfig.projectId || "",
+  dataset: baseClientConfig.dataset,
+};
+
 function assertConfigured() {
   if (!baseClientConfig.projectId) {
     throw new Error("Missing NEXT_PUBLIC_SANITY_PROJECT_ID");

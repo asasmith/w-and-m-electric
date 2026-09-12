@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SanityImage from "@/components/SanityImage";
 import { fallbackProjects } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getProjects } from "@/lib/sanity/queries";
@@ -30,11 +31,29 @@ export default async function GalleryPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="border border-steel/35 bg-gradient-to-br from-steel/18 to-transparent p-4">
                   <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-steel">Before</p>
-                  <div className="mt-4 h-52 border border-steel/30 bg-ink/70" />
+                  <div className="relative mt-4 h-52 overflow-hidden border border-steel/30 bg-ink/70">
+                    {project.beforeImage?.asset?._id ? (
+                      <SanityImage
+                        image={project.beforeImage}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 22vw, 100vw"
+                      />
+                    ) : null}
+                  </div>
                 </div>
                 <div className="border border-copper/35 bg-gradient-to-br from-copper/18 to-transparent p-4">
                   <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-amber">After</p>
-                  <div className="mt-4 h-52 border border-copper/30 bg-paper/5" />
+                  <div className="relative mt-4 h-52 overflow-hidden border border-copper/30 bg-paper/5">
+                    {project.afterImage?.asset?._id ? (
+                      <SanityImage
+                        image={project.afterImage}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 22vw, 100vw"
+                      />
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <h2 className="mt-6 font-display text-3xl uppercase leading-none">{project.title}</h2>

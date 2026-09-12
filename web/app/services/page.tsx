@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SanityImage from "@/components/SanityImage";
 import { fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getServices, getSiteSettings } from "@/lib/sanity/queries";
@@ -36,6 +37,16 @@ export default async function ServicesPage() {
           <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
             {services.map((service, index) => (
               <article key={service._id} className="notched-card border border-steel/35 bg-paper p-6">
+                {service.featuredImage?.asset?._id ? (
+                  <div className="relative mb-6 aspect-[4/3] overflow-hidden border border-steel/35 bg-ink/10">
+                    <SanityImage
+                      image={service.featuredImage}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 40vw, 100vw"
+                    />
+                  </div>
+                ) : null}
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.24em] text-copper">0{index + 1}</p>
                 <h2 className="mt-5 font-display text-4xl uppercase leading-none">{service.title}</h2>
                 <p className="mt-4 text-sm leading-7 text-ink/74">{service.summary}</p>
