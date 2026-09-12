@@ -1,0 +1,3 @@
+[build]
+  command = "pnpm --filter @w-and-m-electric/studio build"
+  publish = "studio/dist"

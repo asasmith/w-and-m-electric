@@ -56,7 +56,7 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
     payload.append("isEmergency", formState.isEmergency ? "Yes" : "No");
     payload.append("company", formState.company);
 
-    const response = await fetch("/", {
+    const response = await fetch("/__forms.html", {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
@@ -93,8 +93,6 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
     <form
       aria-describedby={statusMessageId}
       className="notched-card border border-paper/12 bg-panel p-6 text-paper"
-      data-netlify="true"
-      data-netlify-honeypot="company"
       name="quote-request"
       onSubmit={handleSubmit}
     >
