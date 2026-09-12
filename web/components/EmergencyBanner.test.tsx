@@ -4,14 +4,14 @@ import EmergencyBanner from "./EmergencyBanner";
 
 describe("EmergencyBanner", () => {
   it("renders when emergency service is enabled", () => {
-    render(<EmergencyBanner enabled phone="(757) 555-0188" />);
+    render(<EmergencyBanner enabled message="24/7 emergency electrical response available" phone="(757) 555-0188" />);
 
     expect(screen.getByText(/24\/7 emergency electrical response available/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /call/i })).toHaveAttribute("href", "tel:7575550188");
   });
 
   it("does not render when disabled", () => {
-    const { container } = render(<EmergencyBanner enabled={false} phone="(757) 555-0188" />);
+    const { container } = render(<EmergencyBanner enabled={false} message="24/7 emergency electrical response available" phone="(757) 555-0188" />);
 
     expect(container).toBeEmptyDOMElement();
   });

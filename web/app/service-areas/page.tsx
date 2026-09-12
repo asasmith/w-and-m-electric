@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ServiceAreaCoverageMap from "@/components/ServiceAreaCoverageMap";
-import { fallbackServiceAreas, fallbackSiteSettings } from "@/lib/placeholders";
+import { fallbackServiceAreas, fallbackServiceAreasPage } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
-import { getServiceAreas, getSiteSettings } from "@/lib/sanity/queries";
+import { getServiceAreas, getServiceAreasPage } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Service Areas",
@@ -13,21 +13,21 @@ export const metadata: Metadata = {
 
 export default async function ServiceAreasPage() {
   const isPreview = await isPreviewEnabled();
-  const [serviceAreasData, siteSettingsData] = await Promise.all([
+  const [serviceAreasData, serviceAreasPageData] = await Promise.all([
     getServiceAreas({ preview: isPreview }),
-    getSiteSettings({ preview: isPreview }),
+    getServiceAreasPage({ preview: isPreview }),
   ]);
   const serviceAreas = serviceAreasData.length ? serviceAreasData : fallbackServiceAreas;
-  const siteSettings = siteSettingsData ?? fallbackSiteSettings;
+  const pageContent = serviceAreasPageData ?? fallbackServiceAreasPage;
 
   return (
     <>
       <section className="bg-panel text-paper">
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Service areas</p>
-          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">Local electrical service pages built around the towns we actually cover.</h1>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.heroEyebrow}</p>
+          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">{pageContent.heroHeadline}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/76">
-            {siteSettings.companyName} serves central Maryland communities with fast scheduling, practical troubleshooting, and town-specific landing pages built around real local coverage.
+            {pageContent.heroBody}
           </p>
         </div>
       </section>
@@ -35,9 +35,9 @@ export default async function ServiceAreasPage() {
       <section className="bg-paper text-ink">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-18 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
           <ServiceAreaCoverageMap
-            description="Static map showing current W&M Electrical town coverage across Carroll County, Baltimore County, Baltimore City, and Howard County."
+            description={pageContent.mapDescription}
             serviceAreas={serviceAreas}
-            title="Service area map"
+            title={pageContent.mapTitle}
           />
 
           <div className="grid gap-6">

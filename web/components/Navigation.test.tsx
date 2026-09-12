@@ -8,11 +8,12 @@ vi.mock("next/navigation", () => ({
 
 describe("Navigation", () => {
   it("renders primary navigation links and call button", () => {
-    render(<Navigation companyName="W&M Electrical" phone="(757) 555-0188" />);
+    render(<Navigation companyName="W&M Electrical" companyTagline="Licensed residential + commercial" phone="(757) 555-0188" />);
 
     expect(screen.getByRole("link", { name: /services/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /service areas/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /gallery/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /call now/i })).toHaveAttribute("href", "tel:7575550188");
+    expect(screen.getByText(/licensed residential \+ commercial/i)).toBeInTheDocument();
   });
 });

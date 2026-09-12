@@ -20,7 +20,7 @@ export default function Footer({ siteSettings }: FooterProps) {
         <div>
           <p className="font-display text-3xl uppercase tracking-[0.08em]">{siteSettings.companyName}</p>
           <p className="mt-4 max-w-md text-sm leading-7 text-paper/72">
-            Residential and commercial electrical service built around clean workmanship, clear communication, and dependable response.
+            {siteSettings.footerBlurb}
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export default function Footer({ siteSettings }: FooterProps) {
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.24em] text-steel">Coverage + Social</p>
           <div className="mt-4 space-y-3 text-sm text-paper/82">
-            <p>Serving Carroll County, Baltimore County, Baltimore City, Howard County, and nearby central Maryland communities.</p>
+            <p>{siteSettings.coverageBlurb}</p>
             <div className="flex flex-wrap gap-4">
               {(siteSettings.socialLinks ?? []).map((link) => (
                 <a key={link._key ?? `${link.platform}-${link.url}`} className="transition hover:text-amber" href={link.url} rel="noreferrer" target="_blank">

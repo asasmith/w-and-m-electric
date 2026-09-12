@@ -40,9 +40,98 @@ export type SiteSettings = {
   email: string;
   emergencyAvailable?: boolean;
   licenseNumber?: string;
+   companyTagline?: string;
+   footerBlurb?: string;
+   coverageBlurb?: string;
+   emergencyBannerText?: string;
   hours?: BusinessHour[];
   logo?: SanityImage;
   socialLinks?: SocialLink[];
+};
+
+export type LinkField = {
+  label: string;
+  href: string;
+};
+
+export type HomePageContent = {
+  _id: string;
+  _type: "homePage";
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroBody: string;
+  heroPrimaryCta: LinkField;
+  heroSecondaryCtaLabel: string;
+  trustEyebrow: string;
+  trustHeadline: string;
+  trustItems: string[];
+  rapidEyebrow: string;
+  rapidHeadline: string;
+  rapidCoverageValue: string;
+  rapidLeadTimeValue: string;
+  servicesEyebrow: string;
+  servicesHeadline: string;
+  servicesCtaLabel: string;
+  projectsEyebrow: string;
+  projectsHeadline: string;
+  projectsCtaLabel: string;
+  serviceAreasEyebrow: string;
+  serviceAreasHeadline: string;
+  serviceAreasBody: string;
+  testimonialsEyebrow: string;
+  estimateEyebrow: string;
+  estimateHeadline: string;
+  estimateBody: string;
+  estimatePrimaryCta: LinkField;
+  estimateSecondaryCtaLabel: string;
+};
+
+export type AboutPageContent = {
+  _id: string;
+  _type: "aboutPage";
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroBody: string;
+  trustEyebrow: string;
+  trustItems: string[];
+  operationsEyebrow: string;
+  operationsItems: string[];
+  testimonialsEyebrow: string;
+  ctaLabel: string;
+};
+
+export type ContactPageContent = {
+  _id: string;
+  _type: "contactPage";
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroBody: string;
+  directContactEyebrow: string;
+};
+
+export type ServicesPageContent = {
+  _id: string;
+  _type: "servicesPage";
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroBody: string;
+};
+
+export type ServiceAreasPageContent = {
+  _id: string;
+  _type: "serviceAreasPage";
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroBody: string;
+  mapTitle: string;
+  mapDescription: string;
+};
+
+export type GalleryPageContent = {
+  _id: string;
+  _type: "galleryPage";
+  heroEyebrow: string;
+  heroHeadline: string;
 };
 
 export type ServiceListItem = {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import SanityImage from "@/components/SanityImage";
 import ServiceAreaCoverageMap from "@/components/ServiceAreaCoverageMap";
 import {
+  fallbackHomePage,
   fallbackProjects,
   fallbackServiceAreas,
   fallbackServices,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
 import {
+  getHomePage,
   getProjects,
   getServiceAreas,
   getServices,
@@ -36,14 +38,16 @@ export default async function HomePage() {
   let serviceAreas = fallbackServiceAreas;
   let projects = fallbackProjects;
   let testimonials = fallbackTestimonials;
+  let pageContent = fallbackHomePage;
 
   try {
-    const [settingsData, servicesData, areasData, projectsData, testimonialsData] = await Promise.all([
+    const [settingsData, servicesData, areasData, projectsData, testimonialsData, homePageData] = await Promise.all([
       getSiteSettings({ preview: isPreview }),
       getServices({ preview: isPreview }),
       getServiceAreas({ preview: isPreview }),
       getProjects({ preview: isPreview }),
       getTestimonials({ preview: isPreview }),
+      getHomePage({ preview: isPreview }),
     ]);
 
     siteSettings = settingsData ?? fallbackSiteSettings;
@@ -51,12 +55,14 @@ export default async function HomePage() {
     serviceAreas = areasData.length ? areasData.slice(0, 4) : fallbackServiceAreas;
     projects = projectsData.length ? projectsData.slice(0, 2) : fallbackProjects;
     testimonials = testimonialsData.length ? testimonialsData.slice(0, 3) : fallbackTestimonials;
+    pageContent = homePageData ?? fallbackHomePage;
   } catch {
     siteSettings = fallbackSiteSettings;
     services = fallbackServices;
     serviceAreas = fallbackServiceAreas;
     projects = fallbackProjects;
     testimonials = fallbackTestimonials;
+    pageContent = fallbackHomePage;
   }
 
   const phoneHref = toTelHref(siteSettings.phone);
@@ -74,19 +80,19 @@ export default async function HomePage() {
       >
         <div className="mx-auto grid min-h-[78svh] max-w-7xl items-end gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.28em] text-amber">Residential + Commercial Electrical</p>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-amber">{pageContent.heroEyebrow}</p>
             <h1 className="mt-5 font-display text-6xl uppercase leading-none tracking-[0.05em] sm:text-7xl lg:text-8xl">
-              Clean installs. Fast response. No soft edges.
+              {pageContent.heroHeadline}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-paper/84 sm:text-xl">
-              {siteSettings.companyName} handles service upgrades, troubleshooting, lighting, and urgent electrical repairs with sharp communication and code-focused workmanship.
+              {pageContent.heroBody}
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link className="border border-copper bg-copper px-6 py-4 font-mono text-xs uppercase tracking-[0.24em] text-paper transition hover:bg-amber hover:text-ink" href="/contact">
-                Request Quote
+              <Link className="border border-copper bg-copper px-6 py-4 font-mono text-xs uppercase tracking-[0.24em] text-paper transition hover:bg-amber hover:text-ink" href={pageContent.heroPrimaryCta.href}>
+                {pageContent.heroPrimaryCta.label}
               </Link>
               <a className="border border-paper/40 bg-paper/8 px-6 py-4 font-mono text-xs uppercase tracking-[0.24em] text-paper transition hover:border-amber hover:text-amber" href={phoneHref}>
-                Call {siteSettings.phone}
+                {pageContent.heroSecondaryCtaLabel} {siteSettings.phone}
               </a>
             </div>
           </div>
@@ -94,8 +100,8 @@ export default async function HomePage() {
           <div className="notched-card border border-paper/18 bg-paper/10 p-6 backdrop-blur bolt-grid">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[0.72rem] uppercase tracking-[0.24em] text-amber">Rapid service window</p>
-                <p className="mt-3 font-display text-4xl uppercase leading-none">Licensed. Local. Ready.</p>
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.24em] text-amber">{pageContent.rapidEyebrow}</p>
+                <p className="mt-3 font-display text-4xl uppercase leading-none">{pageContent.rapidHeadline}</p>
               </div>
               <svg aria-hidden="true" className="h-14 w-10 shrink-0 text-amber" viewBox="0 0 60 96" fill="currentColor">
                 <path d="M38 0 6 52h20L17 96l37-58H33z" />
@@ -104,7 +110,7 @@ export default async function HomePage() {
             <dl className="mt-8 grid gap-5 sm:grid-cols-2">
               <div>
                 <dt className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-paper/60">Coverage</dt>
-                <dd className="mt-2 text-lg">Carroll, Baltimore, and Howard County coverage</dd>
+                <dd className="mt-2 text-lg">{pageContent.rapidCoverageValue}</dd>
               </div>
               <div>
                 <dt className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-paper/60">Emergency Calls</dt>
@@ -116,7 +122,7 @@ export default async function HomePage() {
               </div>
               <div>
                 <dt className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-paper/60">Lead Time</dt>
-                <dd className="mt-2 text-lg">Fast scheduling for service work</dd>
+                <dd className="mt-2 text-lg">{pageContent.rapidLeadTimeValue}</dd>
               </div>
             </dl>
           </div>
@@ -126,16 +132,11 @@ export default async function HomePage() {
       <section className="relative bg-paper text-ink">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-18 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.24em] text-copper">Why homeowners and businesses call us</p>
-            <h2 className="mt-4 font-display text-5xl uppercase leading-none">Built for trust before the first estimate.</h2>
+            <p className="font-mono text-xs uppercase tracking-[0.24em] text-copper">{pageContent.trustEyebrow}</p>
+            <h2 className="mt-4 font-display text-5xl uppercase leading-none">{pageContent.trustHeadline}</h2>
           </div>
           <div className="grid gap-px bg-steel/35 md:grid-cols-2">
-            {[
-              "Clear scopes and practical recommendations",
-              "Code-minded repairs and upgrades",
-              "Sharp scheduling for occupied spaces",
-              "Straightforward emergency response",
-            ].map((item) => (
+            {pageContent.trustItems.map((item) => (
               <div key={item} className="notched-card bg-paper px-6 py-8">
                 <p className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-steel">W&M standard</p>
                 <p className="mt-4 text-xl leading-8">{item}</p>
@@ -149,11 +150,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-8">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Core services</p>
-              <h2 className="mt-4 font-display text-5xl uppercase leading-none">From troubleshooting to major service work.</h2>
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.servicesEyebrow}</p>
+              <h2 className="mt-4 font-display text-5xl uppercase leading-none">{pageContent.servicesHeadline}</h2>
             </div>
             <Link className="hidden font-mono text-xs uppercase tracking-[0.22em] text-paper/70 transition hover:text-amber md:block" href="/services">
-              View all services
+              {pageContent.servicesCtaLabel}
             </Link>
           </div>
 
@@ -174,11 +175,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-8">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Proof in the work</p>
-              <h2 className="mt-4 font-display text-5xl uppercase leading-none">Project work, documented without the fluff.</h2>
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.projectsEyebrow}</p>
+              <h2 className="mt-4 font-display text-5xl uppercase leading-none">{pageContent.projectsHeadline}</h2>
             </div>
             <Link className="hidden font-mono text-xs uppercase tracking-[0.22em] text-paper/70 transition hover:text-amber md:block" href="/gallery">
-              Browse gallery
+              {pageContent.projectsCtaLabel}
             </Link>
           </div>
 
@@ -204,10 +205,10 @@ export default async function HomePage() {
       <section className="relative bg-paper text-ink">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-18 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.24em] text-copper">Coverage area</p>
-            <h2 className="mt-4 font-display text-5xl uppercase leading-none">Service-area SEO starts with real local coverage.</h2>
+            <p className="font-mono text-xs uppercase tracking-[0.24em] text-copper">{pageContent.serviceAreasEyebrow}</p>
+            <h2 className="mt-4 font-display text-5xl uppercase leading-none">{pageContent.serviceAreasHeadline}</h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-ink/72">
-              We are building town-specific landing pages for the communities where fast electrical response and reliable scheduling actually matter.
+              {pageContent.serviceAreasBody}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {serviceAreas.map((area) => (
@@ -228,7 +229,7 @@ export default async function HomePage() {
 
       <section className="relative bg-copper text-paper">
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-paper/72">Customer signal</p>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-paper/72">{pageContent.testimonialsEyebrow}</p>
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
             {testimonials.map((testimonial) => (
               <blockquote key={testimonial._id} className="notched-card border border-paper/20 bg-black/10 p-6">
@@ -246,18 +247,18 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
           <div className="notched-card border border-paper/14 bg-panel p-8 lg:flex lg:items-end lg:justify-between lg:gap-8">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Request an estimate</p>
-              <h2 className="mt-4 font-display text-5xl uppercase leading-none">Get the job scoped before the problem grows.</h2>
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.estimateEyebrow}</p>
+              <h2 className="mt-4 font-display text-5xl uppercase leading-none">{pageContent.estimateHeadline}</h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-paper/74">
-                Use the quote form for planned work, upgrades, and service calls. If the issue is urgent or unsafe, use the emergency line for immediate response.
+                {pageContent.estimateBody}
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-4 lg:mt-0">
-              <Link className="border border-copper bg-copper px-6 py-4 text-center font-mono text-xs uppercase tracking-[0.22em] text-paper transition hover:bg-amber hover:text-ink" href="/contact">
-                Open contact page
+              <Link className="border border-copper bg-copper px-6 py-4 text-center font-mono text-xs uppercase tracking-[0.22em] text-paper transition hover:bg-amber hover:text-ink" href={pageContent.estimatePrimaryCta.href}>
+                {pageContent.estimatePrimaryCta.label}
               </Link>
               <a className="border border-paper/30 px-6 py-4 text-center font-mono text-xs uppercase tracking-[0.22em] text-paper transition hover:border-amber hover:text-amber" href={phoneHref}>
-                Emergency line
+                {pageContent.estimateSecondaryCtaLabel}
               </a>
             </div>
           </div>

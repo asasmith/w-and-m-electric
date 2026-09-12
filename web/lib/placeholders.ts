@@ -1,9 +1,15 @@
 import type {
   Project,
+  AboutPageContent,
+  ContactPageContent,
+  GalleryPageContent,
+  HomePageContent,
   Service,
   ServiceArea,
+  ServiceAreasPageContent,
   ServiceAreaListItem,
   ServiceListItem,
+  ServicesPageContent,
   SiteSettings,
   Testimonial,
 } from "@/lib/sanity/types";
@@ -16,6 +22,10 @@ export const fallbackSiteSettings: SiteSettings = {
   email: "service@wmelectrical.com",
   emergencyAvailable: true,
   licenseNumber: "VA Class A 2705-000000A",
+  companyTagline: "Licensed residential + commercial",
+  footerBlurb: "Residential and commercial electrical service built around clean workmanship, clear communication, and dependable response.",
+  coverageBlurb: "Serving Carroll County, Baltimore County, Baltimore City, Howard County, and nearby central Maryland communities.",
+  emergencyBannerText: "24/7 emergency electrical response available",
   hours: [
     { _key: "mon", day: "Mon", opensAt: "7:00 AM", closesAt: "6:00 PM" },
     { _key: "tue", day: "Tue", opensAt: "7:00 AM", closesAt: "6:00 PM" },
@@ -29,6 +39,101 @@ export const fallbackSiteSettings: SiteSettings = {
     { _key: "facebook", platform: "facebook", url: "https://facebook.com" },
     { _key: "linkedin", platform: "linkedin", url: "https://linkedin.com" },
   ],
+};
+
+export const fallbackHomePage: HomePageContent = {
+  _id: "homePage",
+  _type: "homePage",
+  heroEyebrow: "Residential + Commercial Electrical",
+  heroHeadline: "Clean installs. Fast response. No soft edges.",
+  heroBody: "W&M Electrical handles service upgrades, troubleshooting, lighting, and urgent electrical repairs with sharp communication and code-focused workmanship.",
+  heroPrimaryCta: { label: "Request Quote", href: "/contact" },
+  heroSecondaryCtaLabel: "Call",
+  trustEyebrow: "Why homeowners and businesses call us",
+  trustHeadline: "Built for trust before the first estimate.",
+  trustItems: [
+    "Clear scopes and practical recommendations",
+    "Code-minded repairs and upgrades",
+    "Sharp scheduling for occupied spaces",
+    "Straightforward emergency response",
+  ],
+  rapidEyebrow: "Rapid service window",
+  rapidHeadline: "Licensed. Local. Ready.",
+  rapidCoverageValue: "Carroll, Baltimore, and Howard County coverage",
+  rapidLeadTimeValue: "Fast scheduling for service work",
+  servicesEyebrow: "Core services",
+  servicesHeadline: "From troubleshooting to major service work.",
+  servicesCtaLabel: "View all services",
+  projectsEyebrow: "Proof in the work",
+  projectsHeadline: "Project work, documented without the fluff.",
+  projectsCtaLabel: "Browse gallery",
+  serviceAreasEyebrow: "Coverage area",
+  serviceAreasHeadline: "Service-area SEO starts with real local coverage.",
+  serviceAreasBody: "We are building town-specific landing pages for the communities where fast electrical response and reliable scheduling actually matter.",
+  testimonialsEyebrow: "Customer signal",
+  estimateEyebrow: "Request an estimate",
+  estimateHeadline: "Get the job scoped before the problem grows.",
+  estimateBody: "Use the quote form for planned work, upgrades, and service calls. If the issue is urgent or unsafe, use the emergency line for immediate response.",
+  estimatePrimaryCta: { label: "Open contact page", href: "/contact" },
+  estimateSecondaryCtaLabel: "Emergency line",
+};
+
+export const fallbackAboutPage: AboutPageContent = {
+  _id: "aboutPage",
+  _type: "aboutPage",
+  heroEyebrow: "About",
+  heroHeadline: "Sharp response, clean workmanship, and no guesswork in the recommendations.",
+  heroBody: "W&M Electrical is structured around the fundamentals that matter most in trades marketing and repeat business: show up, communicate clearly, do code-conscious work, and leave customers with confidence in the result.",
+  trustEyebrow: "Trust markers",
+  trustItems: [
+    "Licensed residential and commercial electrical service.",
+    "Fast scheduling windows for troubleshooting and repair.",
+    "Service recommendations built around safety and actual load demands.",
+    "License information available on request.",
+  ],
+  operationsEyebrow: "How the company operates",
+  operationsItems: [
+    "Diagnose the problem before overscoping the fix.",
+    "Keep homeowners and tenants informed while work is active.",
+    "Prioritize panel clarity, labeling, and finish quality.",
+    "Treat emergency response as a service obligation, not a sales opportunity.",
+  ],
+  testimonialsEyebrow: "Customer proof",
+  ctaLabel: "Request an estimate",
+};
+
+export const fallbackContactPage: ContactPageContent = {
+  _id: "contactPage",
+  _type: "contactPage",
+  heroEyebrow: "Contact",
+  heroHeadline: "Request a quote with enough detail to move the job forward.",
+  heroBody: "Use the form for planned work and non-immediate issues. If the situation is urgent or unsafe, call the emergency line instead.",
+  directContactEyebrow: "Direct contact",
+};
+
+export const fallbackServicesPage: ServicesPageContent = {
+  _id: "servicesPage",
+  _type: "servicesPage",
+  heroEyebrow: "Services",
+  heroHeadline: "Electrical work that solves the actual problem, not just the visible symptom.",
+  heroBody: "W&M Electrical handles residential and commercial electrical service with sharper communication, practical recommendations, and code-conscious execution.",
+};
+
+export const fallbackServiceAreasPage: ServiceAreasPageContent = {
+  _id: "serviceAreasPage",
+  _type: "serviceAreasPage",
+  heroEyebrow: "Service areas",
+  heroHeadline: "Local electrical service pages built around the towns we actually cover.",
+  heroBody: "W&M Electrical serves central Maryland communities with fast scheduling, practical troubleshooting, and town-specific landing pages built around real local coverage.",
+  mapTitle: "Service area map",
+  mapDescription: "Static map showing current W&M Electrical town coverage across Carroll County, Baltimore County, Baltimore City, and Howard County.",
+};
+
+export const fallbackGalleryPage: GalleryPageContent = {
+  _id: "galleryPage",
+  _type: "galleryPage",
+  heroEyebrow: "Gallery",
+  heroHeadline: "Project work with the context, finish quality, and detail clients actually ask to see.",
 };
 
 export const fallbackServices: ServiceListItem[] = [

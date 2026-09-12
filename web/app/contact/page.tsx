@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
-import { fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
+import { fallbackContactPage, fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
-import { getServices, getSiteSettings } from "@/lib/sanity/queries";
+import { getContactPage, getServices, getSiteSettings } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Contact and Quote Request",
@@ -17,21 +17,23 @@ function toTelHref(phone: string) {
 
 export default async function ContactPage() {
   const isPreview = await isPreviewEnabled();
-  const [servicesData, siteSettingsData] = await Promise.all([
+  const [servicesData, siteSettingsData, contactPageData] = await Promise.all([
     getServices({ preview: isPreview }),
     getSiteSettings({ preview: isPreview }),
+    getContactPage({ preview: isPreview }),
   ]);
   const services = servicesData.length ? servicesData : fallbackServices;
   const siteSettings = siteSettingsData ?? fallbackSiteSettings;
+  const pageContent = contactPageData ?? fallbackContactPage;
 
   return (
     <>
       <section className="bg-panel text-paper">
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Contact</p>
-          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">Request a quote with enough detail to move the job forward.</h1>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.heroEyebrow}</p>
+          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">{pageContent.heroHeadline}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/76">
-            Use the form for planned work and non-immediate issues. If the situation is urgent or unsafe, call the emergency line instead.
+            {pageContent.heroBody}
           </p>
         </div>
       </section>
@@ -39,7 +41,7 @@ export default async function ContactPage() {
       <section className="bg-paper text-ink">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-18 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:px-8">
           <div className="notched-card border border-steel/35 bg-paper p-6">
-            <p className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-copper">Direct contact</p>
+            <p className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-copper">{pageContent.directContactEyebrow}</p>
             <div className="mt-6 space-y-5 text-sm leading-7 text-ink/76">
               <div>
                 <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-steel">Phone</p>

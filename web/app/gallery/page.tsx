@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SanityImage from "@/components/SanityImage";
-import { fallbackProjects } from "@/lib/placeholders";
+import { fallbackGalleryPage, fallbackProjects } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
-import { getProjects } from "@/lib/sanity/queries";
+import { getGalleryPage, getProjects } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Project Gallery",
@@ -13,15 +13,19 @@ export const metadata: Metadata = {
 
 export default async function GalleryPage() {
   const isPreview = await isPreviewEnabled();
-  const projectsData = await getProjects({ preview: isPreview });
+  const [projectsData, galleryPageData] = await Promise.all([
+    getProjects({ preview: isPreview }),
+    getGalleryPage({ preview: isPreview }),
+  ]);
   const projects = projectsData.length ? projectsData : fallbackProjects;
+  const pageContent = galleryPageData ?? fallbackGalleryPage;
 
   return (
     <>
       <section className="bg-panel text-paper">
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Gallery</p>
-          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">Project work with the context, finish quality, and detail clients actually ask to see.</h1>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.heroEyebrow}</p>
+          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">{pageContent.heroHeadline}</h1>
         </div>
       </section>
 

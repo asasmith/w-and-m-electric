@@ -47,8 +47,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>
         <PreviewBanner isPreview={isPreview} />
-        <EmergencyBanner enabled={Boolean(siteSettings.emergencyAvailable)} phone={siteSettings.phone} />
-        <Navigation companyName={siteSettings.companyName} phone={siteSettings.phone} />
+        <EmergencyBanner enabled={Boolean(siteSettings.emergencyAvailable)} message={siteSettings.emergencyBannerText} phone={siteSettings.phone} />
+        <Navigation companyName={siteSettings.companyName} companyTagline={siteSettings.companyTagline} phone={siteSettings.phone} />
         <main>{children}</main>
         <Footer siteSettings={siteSettings} />
       </body>

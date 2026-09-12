@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SanityImage from "@/components/SanityImage";
-import { fallbackServices, fallbackSiteSettings } from "@/lib/placeholders";
+import { fallbackServices, fallbackServicesPage } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
-import { getServices, getSiteSettings } from "@/lib/sanity/queries";
+import { getServices, getServicesPage } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Electrical Services",
@@ -13,21 +13,21 @@ export const metadata: Metadata = {
 
 export default async function ServicesPage() {
   const isPreview = await isPreviewEnabled();
-  const [servicesData, siteSettingsData] = await Promise.all([
+  const [servicesData, servicesPageData] = await Promise.all([
     getServices({ preview: isPreview }),
-    getSiteSettings({ preview: isPreview }),
+    getServicesPage({ preview: isPreview }),
   ]);
   const services = servicesData.length ? servicesData : fallbackServices;
-  const siteSettings = siteSettingsData ?? fallbackSiteSettings;
+  const pageContent = servicesPageData ?? fallbackServicesPage;
 
   return (
     <>
       <section className="bg-panel text-paper">
         <div className="mx-auto max-w-7xl px-4 py-18 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">Services</p>
-          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">Electrical work that solves the actual problem, not just the visible symptom.</h1>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber">{pageContent.heroEyebrow}</p>
+          <h1 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-none">{pageContent.heroHeadline}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/76">
-            {siteSettings.companyName} handles residential and commercial electrical service with sharper communication, practical recommendations, and code-conscious execution.
+            {pageContent.heroBody}
           </p>
         </div>
       </section>

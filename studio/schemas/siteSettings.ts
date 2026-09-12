@@ -9,6 +9,7 @@ export default defineType({
     { name: "contact", title: "Contact" },
     { name: "hours", title: "Hours" },
     { name: "social", title: "Social" },
+    { name: "copy", title: "Shared Copy" },
   ],
   fields: [
     defineField({
@@ -44,6 +45,36 @@ export default defineType({
       title: "License Number",
       type: "string",
       group: "company",
+    }),
+    defineField({
+      name: "companyTagline",
+      title: "Company Tagline",
+      type: "string",
+      group: "copy",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "footerBlurb",
+      title: "Footer Blurb",
+      type: "text",
+      rows: 3,
+      group: "copy",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "coverageBlurb",
+      title: "Coverage Blurb",
+      type: "text",
+      rows: 2,
+      group: "copy",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "emergencyBannerText",
+      title: "Emergency Banner Text",
+      type: "string",
+      group: "copy",
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "hours",

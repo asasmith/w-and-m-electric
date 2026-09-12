@@ -14,6 +14,7 @@ const navLinks = [
 
 type NavigationProps = {
   companyName: string;
+  companyTagline?: string;
   phone: string;
 };
 
@@ -34,7 +35,7 @@ function BoltMark() {
   );
 }
 
-export default function Navigation({ companyName, phone }: NavigationProps) {
+export default function Navigation({ companyName, companyTagline, phone }: NavigationProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,7 +47,7 @@ export default function Navigation({ companyName, phone }: NavigationProps) {
             <BoltMark />
             <div>
               <span className="block font-display text-2xl uppercase tracking-[0.08em] text-paper">{companyName}</span>
-              <span className="block font-mono text-[0.7rem] uppercase tracking-[0.22em] text-steel">Licensed residential + commercial</span>
+              <span className="block font-mono text-[0.7rem] uppercase tracking-[0.22em] text-steel">{companyTagline}</span>
             </div>
           </Link>
 

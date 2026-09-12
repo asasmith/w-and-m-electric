@@ -2,11 +2,17 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { getClient, isSanityConfigured } from "./client";
 import type {
+  AboutPageContent,
+  ContactPageContent,
+  GalleryPageContent,
+  HomePageContent,
   Project,
   Service,
   ServiceArea,
+  ServiceAreasPageContent,
   ServiceAreaListItem,
   ServiceListItem,
+  ServicesPageContent,
   SiteSettings,
   Testimonial,
 } from "./types";
@@ -19,6 +25,10 @@ const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSettings"][0
   email,
   emergencyAvailable,
   licenseNumber,
+  companyTagline,
+  footerBlurb,
+  coverageBlurb,
+  emergencyBannerText,
   hours[]{
     _key,
     day,
@@ -41,6 +51,86 @@ const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSettings"][0
     platform,
     url
   }
+}`;
+
+const homePageQuery = `*[_type == "homePage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline,
+  heroBody,
+  heroPrimaryCta,
+  heroSecondaryCtaLabel,
+  trustEyebrow,
+  trustHeadline,
+  trustItems,
+  rapidEyebrow,
+  rapidHeadline,
+  rapidCoverageValue,
+  rapidLeadTimeValue,
+  servicesEyebrow,
+  servicesHeadline,
+  servicesCtaLabel,
+  projectsEyebrow,
+  projectsHeadline,
+  projectsCtaLabel,
+  serviceAreasEyebrow,
+  serviceAreasHeadline,
+  serviceAreasBody,
+  testimonialsEyebrow,
+  estimateEyebrow,
+  estimateHeadline,
+  estimateBody,
+  estimatePrimaryCta,
+  estimateSecondaryCtaLabel
+}`;
+
+const aboutPageQuery = `*[_type == "aboutPage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline,
+  heroBody,
+  trustEyebrow,
+  trustItems,
+  operationsEyebrow,
+  operationsItems,
+  testimonialsEyebrow,
+  ctaLabel
+}`;
+
+const contactPageQuery = `*[_type == "contactPage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline,
+  heroBody,
+  directContactEyebrow
+}`;
+
+const servicesPageQuery = `*[_type == "servicesPage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline,
+  heroBody
+}`;
+
+const serviceAreasPageQuery = `*[_type == "serviceAreasPage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline,
+  heroBody,
+  mapTitle,
+  mapDescription
+}`;
+
+const galleryPageQuery = `*[_type == "galleryPage"][0]{
+  _id,
+  _type,
+  heroEyebrow,
+  heroHeadline
 }`;
 
 const serviceListQuery = `*[_type == "service"] | order(orderRank asc){
@@ -248,6 +338,38 @@ const getSiteSettingsCached = cache(async (preview?: boolean) => {
 
 export async function getSiteSettings(options?: { preview?: boolean }) {
   return getSiteSettingsCached(options?.preview);
+}
+
+async function getSingletonDocument<T>(query: string, options?: { preview?: boolean }) {
+  if (!isSanityConfigured()) {
+    return null;
+  }
+
+  return getClient(options).fetch<T | null>(query);
+}
+
+export async function getHomePage(options?: { preview?: boolean }) {
+  return getSingletonDocument<HomePageContent>(homePageQuery, options);
+}
+
+export async function getAboutPage(options?: { preview?: boolean }) {
+  return getSingletonDocument<AboutPageContent>(aboutPageQuery, options);
+}
+
+export async function getContactPage(options?: { preview?: boolean }) {
+  return getSingletonDocument<ContactPageContent>(contactPageQuery, options);
+}
+
+export async function getServicesPage(options?: { preview?: boolean }) {
+  return getSingletonDocument<ServicesPageContent>(servicesPageQuery, options);
+}
+
+export async function getServiceAreasPage(options?: { preview?: boolean }) {
+  return getSingletonDocument<ServiceAreasPageContent>(serviceAreasPageQuery, options);
+}
+
+export async function getGalleryPage(options?: { preview?: boolean }) {
+  return getSingletonDocument<GalleryPageContent>(galleryPageQuery, options);
 }
 
 export async function getServices(options?: { preview?: boolean }) {
