@@ -1,6 +1,7 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool, type StructureBuilder } from "sanity/structure";
+import { withOpenPreviewAction } from "./lib/preview";
 import { schemaTypes } from "./schemas";
 
 function buildDeskStructure(S: StructureBuilder) {
@@ -47,6 +48,9 @@ export default defineConfig({
     }),
     visionTool(),
   ],
+  document: {
+    actions: withOpenPreviewAction,
+  },
   schema: {
     types: schemaTypes,
   },
