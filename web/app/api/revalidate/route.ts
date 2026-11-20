@@ -1,5 +1,6 @@
 import { revalidatePath, revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
+import { parseBody } from "next-sanity/webhook";
 
 const SECRET = process.env.REVALIDATE_SECRET;
 
@@ -48,16 +49,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Missing REVALIDATE_SECRET" }, { status: 500 });
   }
 
-  const secret = request.headers.get("x-revalidate-secret");
-  if (secret !== SECRET) {
-    return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
-  }
-
-  let payload: RevalidatePayload;
+  // Sanity signs each delivery with the webhook's secret (HMAC-SHA256 over
+  // timestamp + body), so the secret itself never travels with the request.
+  // parseBody also waits ~3s after a valid signature so the regenerated pages
+  // read the just-published content rather than a stale CDN copy.
+  let parsed: Awaited<ReturnType<typeof parseBody<RevalidatePayload>>>;
 
   try {
-    payload = await request.json();
+    parsed = await parseBody<RevalidatePayload>(request as NextRequest, SECRET);
   } catch {
+    return NextResponse.json({ message: "Invalid JSON payload" }, { status: 400 });
+  }
+
+  if (!parsed.isValidSignature) {
+    return NextResponse.json({ message: "Invalid signature" }, { status: 401 });
+  }
+
+  const payload = parsed.body;
+  if (!payload) {
     return NextResponse.json({ message: "Invalid JSON payload" }, { status: 400 });
   }
 
