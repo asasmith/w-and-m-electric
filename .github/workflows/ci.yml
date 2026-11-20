@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # Version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@v4
+
+      # Version comes from "volta.node" in package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (web)
+        run: pnpm lint
+
+      - name: Typecheck (web)
+        run: pnpm --filter @w-and-m-electric/web typecheck
+
+      - name: Validate Sanity schemas (studio)
+        run: pnpm --filter @w-and-m-electric/studio lint
+
+      - name: Test (web + studio)
+        run: pnpm test
+
+      # No Sanity env vars in CI: pages build from placeholder content,
+      # which verifies the build without needing secrets.
+      - name: Build (web)
+        run: pnpm build
