@@ -89,6 +89,56 @@ describe("revalidate route", () => {
     expect(revalidatePath).toHaveBeenCalledWith("/gallery/ranch-home-panel-refresh");
   });
 
+  it.each([
+    ["homePage", "/"],
+    ["aboutPage", "/about"],
+    ["contactPage", "/contact"],
+    ["servicesPage", "/services"],
+    ["serviceAreasPage", "/service-areas"],
+    ["galleryPage", "/gallery"],
+  ])("revalidates only the route for the %s singleton", async (type, path) => {
+    vi.stubEnv("REVALIDATE_SECRET", "top-secret");
+
+    const { POST } = await import("./route");
+
+    const response = await POST(
+      new Request("http://localhost/api/revalidate", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-revalidate-secret": "top-secret",
+        },
+        body: JSON.stringify({ _type: type }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ revalidated: true, paths: [path] });
+    expect(revalidatePath).toHaveBeenCalledTimes(1);
+    expect(revalidatePath).toHaveBeenCalledWith(path);
+    expect(revalidateTag).not.toHaveBeenCalled();
+  });
+
+  it("rejects unknown document types", async () => {
+    vi.stubEnv("REVALIDATE_SECRET", "top-secret");
+
+    const { POST } = await import("./route");
+
+    const response = await POST(
+      new Request("http://localhost/api/revalidate", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-revalidate-secret": "top-secret",
+        },
+        body: JSON.stringify({ _type: "somethingElse" }),
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
   it("revalidates the site settings tag and shared pages", async () => {
     vi.stubEnv("REVALIDATE_SECRET", "top-secret");
 

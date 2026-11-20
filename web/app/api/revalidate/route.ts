@@ -10,8 +10,22 @@ type RevalidatePayload = {
   };
 };
 
+// Page-copy singletons are each read by exactly one route.
+const singletonPagePaths: Record<string, string> = {
+  homePage: "/",
+  aboutPage: "/about",
+  contactPage: "/contact",
+  servicesPage: "/services",
+  serviceAreasPage: "/service-areas",
+  galleryPage: "/gallery",
+};
+
 function getPathsForPayload(payload: RevalidatePayload) {
   const slug = payload.slug?.current;
+
+  if (payload._type && Object.hasOwn(singletonPagePaths, payload._type)) {
+    return [singletonPagePaths[payload._type]];
+  }
 
   switch (payload._type) {
     case "siteSettings":
