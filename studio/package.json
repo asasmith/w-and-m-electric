@@ -6,7 +6,9 @@
     "dev": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "lint": "sanity schemas validate"
+    "lint": "sanity schemas validate",
+    "test": "vitest run",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@sanity/client": "^7.23.1",
@@ -16,6 +18,7 @@
     "styled-components": "^6.3.6"
   },
   "devDependencies": {
-    "@sanity/vision": "^5.4.0"
+    "@sanity/vision": "^5.4.0",
+    "vitest": "^4.1.10"
   }
 }

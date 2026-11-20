@@ -7,11 +7,13 @@
     "build": "pnpm --filter @w-and-m-electric/web build",
     "start": "pnpm --filter @w-and-m-electric/web start",
     "lint": "pnpm --filter @w-and-m-electric/web lint",
-    "test": "pnpm --filter @w-and-m-electric/web test",
+    "test": "pnpm -r --filter @w-and-m-electric/web --filter @w-and-m-electric/studio test",
     "test:watch": "pnpm --filter @w-and-m-electric/web test:watch",
     "sanity": "pnpm --filter @w-and-m-electric/studio dev",
     "sanity:build": "pnpm --filter @w-and-m-electric/studio build",
-    "sanity:deploy": "pnpm --filter @w-and-m-electric/studio deploy"
+    "sanity:deploy": "pnpm --filter @w-and-m-electric/studio deploy",
+    "test:web": "pnpm --filter @w-and-m-electric/web test",
+    "test:studio": "pnpm --filter @w-and-m-electric/studio test"
   },
   "packageManager": "pnpm@10.28.0",
   "volta": {
