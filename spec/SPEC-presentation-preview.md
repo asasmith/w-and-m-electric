@@ -107,7 +107,7 @@ export const { GET } = defineEnableDraftMode({
 - [ ] Enable route rejects missing/invalid/expired secrets (tests + manual)
 - [ ] Public pages: no stega characters in HTML (`curl` check), no overlays
 - [ ] Old `/api/preview` route and `studio/lib/preview.ts` removed; `SANITY_PREVIEW_SECRET` removed from both Netlify sites
-- [ ] Verified in Chrome, Safari, Firefox
+- [ ] Verified in Chrome and Firefox (supported editing browsers; see Decisions)
 - [ ] `pnpm test`, lint, typecheck, schema validation, both builds pass
 
 ## Risks
@@ -127,3 +127,6 @@ export const { GET } = defineEnableDraftMode({
 
 1. **Custom domain:** planned but not set up. V1 ships on the `*.netlify.app` addresses and must be verified in Chrome, Safari, and Firefox. If Safari/Firefox block the draft-mode cookie in the iframe, document the limitation and resolve it when the custom domain lands (site + `studio.` subdomain on one registrable domain), rather than blocking V1.
 2. **Old "Open Preview" action:** delete it entirely (`studio/lib/preview.ts`, its tests, and the `document.actions` hook). Presentation's own "open in new tab" control replaces it.
+3. **Supported editing browsers:** Chrome and Firefox. Safari is not supported for editing in Presentation (cross-site iframe cookie risk; untested). The owner will tell the client. Revisit if/when the custom domain puts site and studio on one registrable domain.
+4. **Live updates:** a debounced custom `refresh` handler for `<VisualEditing />` instead of `<SanityLive>`. SanityLive would require migrating every query to `sanityFetch` and adds a live connection per visitor; revisit if real-time published updates are wanted (still Deferred).
+

@@ -18,7 +18,7 @@ One PR per task (1–4). Task 5 is manual.
 - [x] Tests pass: `pnpm test` (web 44, studio 23)
 - [x] Build succeeds: `pnpm build` and `pnpm sanity:build`
 - [ ] Manual (local): `pnpm dev` + `pnpm sanity` → Presentation works; confirms read token can validate secrets (needs a logged-in editor; token itself verified valid)
-- [x] Manual (Checkpoint A): draft banner shows inside Presentation in **Chrome and Firefox** (2026-11-21). Safari not yet checked.
+- [x] Manual (Checkpoint A): draft banner shows inside Presentation in **Chrome and Firefox** (2026-11-21). Safari: not supported for editing (owner decision).
 
 **Dependencies:** None
 
@@ -69,16 +69,18 @@ One PR per task (1–4). Task 5 is manual.
 **Description:** Add a `resolve` config for `presentationTool` with `mainDocuments` (route → document) and `locations` (document → routes) for every previewable type, reusing today's `getPreviewPath` mapping.
 
 **Acceptance criteria:**
-- [ ] Each page singleton, site settings, service, service area, and project shows "Used on" location(s) linking into Presentation
-- [ ] Navigating Presentation to `/services/panel-upgrades` (etc.) auto-opens that document
-- [ ] Slugged documents without a slug show no location (no broken link)
+- [ ] Each page singleton, site settings, service, service area, and project shows "Used on" location(s) linking into Presentation (mapping tested; manual check pending)
+- [ ] Navigating Presentation to `/services/panel-upgrades` (etc.) auto-opens that document (mapping tested; manual check pending)
+- [x] Slugged documents without a slug show a caution message and index links, never `/…/undefined` (tested)
 
 **Verification:**
-- [ ] Tests pass: `pnpm test:studio` (new `studio/lib/presentation/resolve.test.ts`)
-- [ ] Build succeeds: `pnpm sanity:build`
+- [x] Tests pass: `pnpm test:studio` (studio 47)
+- [x] Build succeeds: `pnpm sanity:build`
 - [ ] Manual: open a service in Studio → location link → correct page in Presentation
 
 **Dependencies:** Task 1
+
+**Note:** testimonials are linked to `/` and `/about` only; they also render on every service and service-area detail page (a variable list). Found while mapping: the revalidate route's testimonial/project paths are wrong (separate issue).
 
 **Files likely touched:**
 - `studio/lib/presentation/resolve.ts`
@@ -90,7 +92,7 @@ One PR per task (1–4). Task 5 is manual.
 ---
 
 ## Checkpoint B (human)
-- [ ] Full editor flow on deploy previews (edit → live update → click-to-edit → locations)
+- [x] Edit → live update → click-to-edit verified in Chrome (2026-11-21); locations pending Task 3
 - [ ] Public site clean in a private window
 - [ ] Approve cut-over
 
