@@ -56,6 +56,8 @@ One PR per task (1–4). Task 5 is manual.
 - `web/components/VisualEditingInDraftMode.tsx` + test (new; keeps the draft-mode gate testable)
 - `web/components/Footer.tsx` + `Footer.test.tsx` (new)
 
+**Found in Checkpoint B:** next-sanity 13's default `<VisualEditing />` refresh ignores edits (`source: "mutation"`) and expects `<SanityLive>`. Added a debounced refresh handler (`lib/sanity/previewRefresh.ts`) via a client wrapper (`PreviewVisualEditing`), keeping the draft-mode gate server-side so public pages reference no preview code.
+
 **Plan change:** shipped in the same PR as Task 1 (#10) so testing reuses the deploy-preview CORS origin already allowed.
 
 **Estimated scope:** Medium (5 files)
