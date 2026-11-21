@@ -3,6 +3,7 @@ import { defineConfig } from "sanity";
 import { presentationTool } from "sanity/presentation";
 import { structureTool, type StructureBuilder } from "sanity/structure";
 import { resolvePreviewOrigin } from "./lib/presentation/previewOrigin";
+import { locations, mainDocuments } from "./lib/presentation/resolve";
 import { withOpenPreviewAction } from "./lib/preview";
 import { schemaTypes } from "./schemas";
 
@@ -59,6 +60,7 @@ export default defineConfig({
           shareAccess: false,
         },
       },
+      resolve: { mainDocuments, locations },
     }),
     visionTool(),
   ],
