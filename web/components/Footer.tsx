@@ -1,3 +1,4 @@
+import { stegaClean } from "next-sanity";
 import type { SiteSettings } from "@/lib/sanity/types";
 
 type FooterProps = {
@@ -9,7 +10,9 @@ function toTelHref(phone: string) {
   return digits ? `tel:${digits}` : "#";
 }
 
-function platformLabel(platform: string) {
+function platformLabel(encodedPlatform: string) {
+  // Strip draft-mode stega characters before comparing the value.
+  const platform = stegaClean(encodedPlatform);
   return platform === "x" ? "X" : `${platform.charAt(0).toUpperCase()}${platform.slice(1)}`;
 }
 
