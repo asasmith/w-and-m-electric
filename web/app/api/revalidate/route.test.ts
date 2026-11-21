@@ -114,57 +114,50 @@ describe("revalidate route", () => {
     });
   });
 
-  describe("path mapping", () => {
-    it("revalidates service detail and index paths", async () => {
-      const response = await post(webhookRequest({ _type: "service", slug: { current: "panel-upgrades" } }));
-
-      expect(response.status).toBe(200);
-      expect(revalidatePath).toHaveBeenCalledWith("/");
-      expect(revalidatePath).toHaveBeenCalledWith("/services");
-      expect(revalidatePath).toHaveBeenCalledWith("/services/panel-upgrades");
-      expect(revalidateTag).not.toHaveBeenCalled();
-    });
-
-    it("revalidates gallery detail and index paths for projects", async () => {
-      const response = await post(webhookRequest({ _type: "project", slug: { current: "ranch-home-panel-refresh" } }));
-
-      expect(response.status).toBe(200);
-      expect(revalidatePath).toHaveBeenCalledWith("/");
-      expect(revalidatePath).toHaveBeenCalledWith("/gallery");
-      expect(revalidatePath).toHaveBeenCalledWith("/gallery/ranch-home-panel-refresh");
-    });
-
+  // Every page reads several document types (services appear on almost every
+  // page via references; site settings via the layout), so a hand-kept path
+  // list per type drifts (#11). Any supported publish refreshes the whole site;
+  // pages regenerate on their next request.
+  describe("what a publish refreshes", () => {
     it.each([
-      ["homePage", "/"],
-      ["aboutPage", "/about"],
-      ["contactPage", "/contact"],
-      ["servicesPage", "/services"],
-      ["serviceAreasPage", "/service-areas"],
-      ["galleryPage", "/gallery"],
-    ])("revalidates only the route for the %s singleton", async (type, path) => {
-      const response = await post(webhookRequest({ _type: type }));
+      ["homePage"],
+      ["aboutPage"],
+      ["contactPage"],
+      ["servicesPage"],
+      ["serviceAreasPage"],
+      ["galleryPage"],
+      ["service"],
+      ["serviceArea"],
+      ["project"],
+      ["testimonial"],
+      ["siteSettings"],
+    ])("refreshes every page when a %s is published", async (type) => {
+      const response = await post(webhookRequest({ _type: type, slug: { current: "some-slug" } }));
 
       expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ revalidated: true, paths: [path] });
+      expect(await response.json()).toEqual({ revalidated: true, type });
       expect(revalidatePath).toHaveBeenCalledTimes(1);
-      expect(revalidatePath).toHaveBeenCalledWith(path);
+      expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+    });
+
+    it("also refreshes the cached site settings", async () => {
+      await post(webhookRequest({ _type: "siteSettings" }));
+
+      expect(revalidateTag).toHaveBeenCalledWith("siteSettings", "default");
+    });
+
+    it.each(["service", "testimonial", "project"])("does not touch the site settings cache for a %s", async (type) => {
+      await post(webhookRequest({ _type: type }));
+
       expect(revalidateTag).not.toHaveBeenCalled();
     });
 
-    it("rejects unknown document types", async () => {
+    it("rejects unknown document types without refreshing anything", async () => {
       const response = await post(webhookRequest({ _type: "somethingElse" }));
 
       expect(response.status).toBe(400);
       expect(revalidatePath).not.toHaveBeenCalled();
-    });
-
-    it("revalidates the site settings tag and shared pages", async () => {
-      const response = await post(webhookRequest({ _type: "siteSettings" }));
-
-      expect(response.status).toBe(200);
-      expect(revalidateTag).toHaveBeenCalledWith("siteSettings", "default");
-      expect(revalidatePath).toHaveBeenCalledWith("/contact");
-      expect(revalidatePath).toHaveBeenCalledWith("/gallery");
+      expect(revalidateTag).not.toHaveBeenCalled();
     });
   });
 });
