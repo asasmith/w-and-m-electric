@@ -3,6 +3,7 @@
 Source spec: `spec/SPEC-presentation-preview.md` (approved)
 Issue: #7
 Task list: `tasks/todo.md`
+Status: **complete** (#10, #12; issue #7 closed)
 
 ## Overview
 
@@ -20,28 +21,28 @@ Replace the fixed-secret "Open Preview" flow with Sanity's Presentation tool: sh
 ## Task List
 
 ### Phase 1: Prove the risky path
-- [ ] Task 1: Presentation tab + short-lived-secret draft mode (enable route, plugin, paired deploy previews)
+- [x] Task 1: Presentation tab + short-lived-secret draft mode (enable route, plugin, paired deploy previews)
 
 ### Checkpoint A (human): cross-site draft mode works
-- [ ] On the PR's studio deploy preview, Presentation loads the site preview in draft mode in Chrome, Safari, Firefox
-- [ ] Record any browser that fails (spec decision: document it, revisit with custom domain)
+- [x] On the PR's studio deploy preview, Presentation loads the site preview in draft mode in Chrome, Safari, Firefox
+- [x] Record any browser that fails (spec decision: document it, revisit with custom domain)
 
 ### Phase 2: Editor experience
-- [ ] Task 2: Click-to-edit and live refresh (stega on preview client, `<VisualEditing />`, stegaClean)
-- [ ] Task 3: Document → page locations (`resolve` for every previewable type)
+- [x] Task 2: Click-to-edit and live refresh (stega on preview client, `<VisualEditing />`, stegaClean)
+- [x] Task 3: Document → page locations (`resolve` for every previewable type)
 
 ### Checkpoint B (human): full editor flow
-- [ ] Edit → preview updates without reload; clicking text focuses the field; every document type offers a location
-- [ ] Public site in a private window: no overlays, no stega characters in HTML
+- [x] Edit → preview updates without reload; clicking text focuses the field; every document type offers a location
+- [x] Public site in a private window: no overlays, no stega characters in HTML
 
 ### Phase 3: Cut-over and cleanup
-- [ ] Task 4: Remove the fixed-secret flow (`/api/preview`, "Open Preview" action, tests)
-- [ ] Task 5 (you, in Netlify): env var cleanup, token check, production verification, close #7
+- [x] Task 4: Remove the fixed-secret flow (`/api/preview`, "Open Preview" action, tests)
+- [x] Task 5 (you, in Netlify): env var cleanup, token check, production verification, close #7
 
 ### Checkpoint C: Complete
-- [ ] All spec success criteria checked
-- [ ] Studio bundle contains no preview secret
-- [ ] #7 closed with verification notes
+- [x] All spec success criteria checked
+- [x] Studio bundle contains no preview secret
+- [x] #7 closed with verification notes
 
 ## Risks and Mitigations
 
