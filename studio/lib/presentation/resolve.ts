@@ -1,7 +1,8 @@
 import type { DocumentLocation, DocumentLocationResolvers, DocumentLocationsState, DocumentResolver } from "sanity/presentation";
 
-// Keep in sync with the site's routes (web/app) and, for what refreshes on
-// publish, web/app/api/revalidate/route.ts.
+// Keep in sync with the site's routes (web/app). Publishing refreshes the
+// whole site (web/app/api/revalidate/route.ts), so these locations only
+// decide where editors can jump to, not what gets refreshed.
 
 const HOME: DocumentLocation = { title: "Home", href: "/" };
 const ABOUT: DocumentLocation = { title: "About", href: "/about" };
