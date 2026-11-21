@@ -1,6 +1,6 @@
 # Spec: Presentation Tool Draft Preview — V1
 
-Status: approved
+Status: implemented (#10, #12)
 Implements: GitHub issue #7
 
 ## Objective
@@ -99,16 +99,16 @@ export const { GET } = defineEnableDraftMode({
 
 ## Success Criteria
 
-- [ ] Presentation tab in the deployed studio shows the deployed site in draft mode
-- [ ] Edits appear in the preview without manual reload
-- [ ] Click-to-edit overlays work on page copy, services, areas, projects
-- [ ] Every previewable document type offers a Presentation location
-- [ ] Built studio bundle contains no preview secret (`grep -r` on `studio/dist`)
-- [ ] Enable route rejects missing/invalid/expired secrets (tests + manual)
-- [ ] Public pages: no stega characters in HTML (`curl` check), no overlays
-- [ ] Old `/api/preview` route and `studio/lib/preview.ts` removed; `SANITY_PREVIEW_SECRET` removed from both Netlify sites
-- [ ] Verified in Chrome and Firefox (supported editing browsers; see Decisions)
-- [ ] `pnpm test`, lint, typecheck, schema validation, both builds pass
+- [x] Presentation tab in the deployed studio shows the deployed site in draft mode
+- [x] Edits appear in the preview without manual reload
+- [x] Click-to-edit overlays work on page copy, services, areas, projects
+- [x] Every previewable document type offers a Presentation location
+- [x] Built studio bundle contains no preview secret (`grep -r` on `studio/dist`)
+- [x] Enable route rejects missing/invalid/expired secrets (tests + manual)
+- [x] Public pages: no stega characters in HTML (`curl` check), no overlays
+- [x] Old `/api/preview` route and `studio/lib/preview.ts` removed; `SANITY_PREVIEW_SECRET` removed from both Netlify sites
+- [x] Verified in Chrome and Firefox (supported editing browsers; see Decisions)
+- [x] `pnpm test`, lint, typecheck, schema validation, both builds pass
 
 ## Risks
 
