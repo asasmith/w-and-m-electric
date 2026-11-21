@@ -105,12 +105,12 @@ One PR per task (1–4). Task 5 is manual.
 **Acceptance criteria:**
 - [ ] `/api/preview` returns 404 on the deploy preview
 - [ ] No "Open Preview" document action in Studio
-- [ ] No reference to `SANITY_PREVIEW_SECRET` / `SANITY_STUDIO_PREVIEW_SECRET` in the repo; built `studio/dist` contains no preview secret
+- [x] No reference to `SANITY_PREVIEW_SECRET` / `SANITY_STUDIO_PREVIEW_SECRET` in the repo (outside spec/tasks history); built `studio/dist` contains no preview secret or `/api/preview`
 
 **Verification:**
-- [ ] Tests pass: `pnpm test`
-- [ ] Build succeeds: `pnpm build` and `pnpm sanity:build`
-- [ ] Manual: `grep -r PREVIEW_SECRET` repo and `studio/dist` → no matches
+- [x] Tests pass: `pnpm test` (web 54, studio 30)
+- [x] Build succeeds: `pnpm build` and `pnpm sanity:build`
+- [x] Manual: `grep -r PREVIEW_SECRET` repo and `studio/dist` → no matches
 
 **Dependencies:** Tasks 2, 3 (Checkpoint B approved)
 
