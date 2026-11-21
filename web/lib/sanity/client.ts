@@ -51,10 +51,13 @@ export function getClient(options?: { preview?: boolean }) {
     });
   }
 
+  // Not the API CDN: pages are static and only query Sanity at build or
+  // webhook revalidation time, and the CDN can lag a fresh publish by several
+  // seconds, which would re-cache stale content right after the webhook fires.
   return createClient({
     ...baseClientConfig,
     projectId: baseClientConfig.projectId,
-    useCdn: true,
+    useCdn: false,
     perspective: "published",
   });
 }
