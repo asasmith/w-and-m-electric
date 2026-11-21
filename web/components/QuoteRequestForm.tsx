@@ -44,27 +44,32 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
     setSubmissionState({ status: "submitting" });
 
     const formElement = event.currentTarget;
-    const payload = new FormData();
+    const body = new URLSearchParams({
+      "form-name": "quote-request",
+      name: formState.name,
+      phone: formState.phone,
+      email: formState.email,
+      address: formState.address,
+      serviceRequested: formState.serviceRequested,
+      details: formState.details,
+      isEmergency: formState.isEmergency ? "Yes" : "No",
+      company: formState.company,
+    });
 
-    payload.append("form-name", "quote-request");
-    payload.append("name", formState.name);
-    payload.append("phone", formState.phone);
-    payload.append("email", formState.email);
-    payload.append("address", formState.address);
-    payload.append("serviceRequested", formState.serviceRequested);
-    payload.append("details", formState.details);
-    payload.append("isEmergency", formState.isEmergency ? "Yes" : "No");
-    payload.append("company", formState.company);
-
-    const response = await fetch("/__forms.html", {
+    // A rejected fetch (offline, DNS, blocked) and a non-2xx response are the
+    // same failure to the visitor: keep their input and point them to phone/email.
+    const sent = await fetch("/__forms.html", {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams(payload as unknown as URLSearchParams).toString(),
-    });
+      body: body.toString(),
+    }).then(
+      (response) => response.ok,
+      () => false,
+    );
 
-    if (!response.ok) {
+    if (!sent) {
       setSubmissionState({
         status: "error",
         message: "We could not send your request right now. Please call or email us directly.",
@@ -143,7 +148,7 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
           >
             <option value="">Select a service</option>
             {services.map((service) => (
-              <option key={service._id} value={service._id}>
+              <option key={service._id} value={service.title}>
                 {service.title}
               </option>
             ))}
@@ -173,10 +178,13 @@ export default function QuoteRequestForm({ services }: QuoteRequestFormProps) {
         />
       </label>
 
-      <label className="mt-5 block sr-only" htmlFor="company">
-        Company
-      </label>
-      <input autoComplete="off" className="sr-only" id="company" name="company" onChange={(event) => updateField("company", event.target.value)} tabIndex={-1} value={formState.company} />
+      {/* Spam trap: Netlify drops submissions that fill this in (see netlify-honeypot
+          in public/__forms.html). Hidden visually and from assistive technology so
+          real visitors never fill it. */}
+      <div aria-hidden="true" className="sr-only">
+        <label htmlFor="company">Leave this field empty</label>
+        <input autoComplete="off" id="company" name="company" onChange={(event) => updateField("company", event.target.value)} tabIndex={-1} value={formState.company} />
+      </div>
 
       <label className="mt-5 flex items-center gap-3 text-sm text-paper/82">
         <input checked={formState.isEmergency} className="h-4 w-4 border border-steel/35 bg-ink" name="isEmergency" onChange={(event) => updateField("isEmergency", event.target.checked)} type="checkbox" />
