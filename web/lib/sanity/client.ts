@@ -6,6 +6,10 @@ const baseClientConfig = {
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-07-13",
 };
 
+// Where click-to-edit links point when a stega-encoded string is opened
+// outside the Presentation tool. Public URL, not a secret.
+const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || "https://w-and-m-electric-studio.netlify.app";
+
 export const imageUrlBuilderConfig = {
   projectId: baseClientConfig.projectId || "",
   dataset: baseClientConfig.dataset,
@@ -48,6 +52,8 @@ export function getClient(options?: { preview?: boolean }) {
       useCdn: false,
       perspective: "drafts",
       token: process.env.SANITY_API_READ_TOKEN,
+      // Draft mode only: encode source info into strings for click-to-edit.
+      stega: { enabled: true, studioUrl },
     });
   }
 

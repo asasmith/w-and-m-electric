@@ -1,6 +1,9 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
+import { presentationTool } from "sanity/presentation";
 import { structureTool, type StructureBuilder } from "sanity/structure";
+import { resolvePreviewOrigin } from "./lib/presentation/previewOrigin";
+import { locations, mainDocuments } from "./lib/presentation/resolve";
 import { withOpenPreviewAction } from "./lib/preview";
 import { schemaTypes } from "./schemas";
 
@@ -45,6 +48,19 @@ export default defineConfig({
   plugins: [
     structureTool({
       structure: buildDeskStructure,
+    }),
+    presentationTool({
+      previewUrl: {
+        initial: ({ origin }) => resolvePreviewOrigin(origin, process.env.SANITY_STUDIO_PREVIEW_URL),
+        previewMode: {
+          // Studio creates a short-lived secret per logged-in editor; the site
+          // validates it server-side. No shared secret ships in this bundle.
+          enable: "/api/draft-mode/enable",
+          // No public share links: only logged-in editors can preview drafts.
+          shareAccess: false,
+        },
+      },
+      resolve: { mainDocuments, locations },
     }),
     visionTool(),
   ],

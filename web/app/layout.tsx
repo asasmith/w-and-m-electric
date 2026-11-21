@@ -4,6 +4,7 @@ import EmergencyBanner from "@/components/EmergencyBanner";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import PreviewBanner from "@/components/PreviewBanner";
+import VisualEditingInDraftMode from "@/components/VisualEditingInDraftMode";
 import { fallbackSiteSettings } from "@/lib/placeholders";
 import { isPreviewEnabled } from "@/lib/sanity/preview";
 import { getSiteSettings } from "@/lib/sanity/queries";
@@ -51,6 +52,7 @@ export default async function RootLayout({
         <Navigation companyName={siteSettings.companyName} companyTagline={siteSettings.companyTagline} phone={siteSettings.phone} />
         <main>{children}</main>
         <Footer siteSettings={siteSettings} />
+        <VisualEditingInDraftMode enabled={isPreview} />
       </body>
     </html>
   );
