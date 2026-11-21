@@ -69,14 +69,14 @@ One PR per task (1–4). Task 5 is manual.
 **Description:** Add a `resolve` config for `presentationTool` with `mainDocuments` (route → document) and `locations` (document → routes) for every previewable type, reusing today's `getPreviewPath` mapping.
 
 **Acceptance criteria:**
-- [ ] Each page singleton, site settings, service, service area, and project shows "Used on" location(s) linking into Presentation (mapping tested; manual check pending)
-- [ ] Navigating Presentation to `/services/panel-upgrades` (etc.) auto-opens that document (mapping tested; manual check pending)
+- [x] Each page singleton, site settings, service, service area, and project shows "Used on" location(s) linking into Presentation (verified on deploy preview 2026-11-21)
+- [x] Navigating Presentation to `/services/panel-upgrades` (etc.) auto-opens that document (verified on deploy preview)
 - [x] Slugged documents without a slug show a caution message and index links, never `/…/undefined` (tested)
 
 **Verification:**
 - [x] Tests pass: `pnpm test:studio` (studio 47)
 - [x] Build succeeds: `pnpm sanity:build`
-- [ ] Manual: open a service in Studio → location link → correct page in Presentation
+- [x] Manual: open a service in Studio → location link → correct page in Presentation
 
 **Dependencies:** Task 1
 
@@ -92,9 +92,9 @@ One PR per task (1–4). Task 5 is manual.
 ---
 
 ## Checkpoint B (human)
-- [x] Edit → live update → click-to-edit verified in Chrome (2026-11-21); locations pending Task 3
-- [ ] Public site clean in a private window
-- [ ] Approve cut-over
+- [x] Edit → live update → click-to-edit → locations verified in Chrome (2026-11-21)
+- [x] Public site clean (0 stega chars in built and deployed public HTML; no visual-editing chunk referenced)
+- [x] Approve cut-over (owner confirmed 2026-11-21)
 
 ---
 
