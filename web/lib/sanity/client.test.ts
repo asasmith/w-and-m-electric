@@ -23,6 +23,28 @@ describe("getClient", () => {
     expect(config.perspective).toBe("published");
   });
 
+  // Stega appends invisible characters to strings for click-to-edit. Public
+  // pages must never get them.
+  it("never stega-encodes published content", async () => {
+    const { getClient } = await loadClient();
+    expect(getClient().config().stega.enabled).toBeFalsy();
+  });
+
+  it("stega-encodes draft content with a link back to the studio", async () => {
+    const { getClient } = await loadClient();
+    const { stega } = getClient({ preview: true }).config();
+
+    expect(stega.enabled).toBe(true);
+    expect(stega.studioUrl).toBe("https://w-and-m-electric-studio.netlify.app");
+  });
+
+  it("uses NEXT_PUBLIC_SANITY_STUDIO_URL for studio links when set", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SANITY_STUDIO_URL", "http://localhost:3333");
+    const { getClient } = await loadClient();
+
+    expect(getClient({ preview: true }).config().stega.studioUrl).toBe("http://localhost:3333");
+  });
+
   it("reads drafts from the live API in preview mode", async () => {
     const { getClient } = await loadClient();
     const config = getClient({ preview: true }).config();

@@ -18,7 +18,7 @@ One PR per task (1–4). Task 5 is manual.
 - [x] Tests pass: `pnpm test` (web 44, studio 23)
 - [x] Build succeeds: `pnpm build` and `pnpm sanity:build`
 - [ ] Manual (local): `pnpm dev` + `pnpm sanity` → Presentation works; confirms read token can validate secrets (needs a logged-in editor; token itself verified valid)
-- [ ] Manual (Checkpoint A): studio deploy preview in Chrome, Safari, Firefox
+- [x] Manual (Checkpoint A): draft banner shows inside Presentation in **Chrome and Firefox** (2026-11-21). Safari not yet checked.
 
 **Dependencies:** None
 
@@ -41,21 +41,22 @@ One PR per task (1–4). Task 5 is manual.
 **Acceptance criteria:**
 - [ ] In Presentation, clicking Sanity-driven text focuses that document/field
 - [ ] Editing a field updates the preview without a manual reload
-- [ ] Published client has stega off; public HTML contains no stega characters
+- [x] Published client has stega off; public HTML contains no stega characters (0/18 built pages; scan positive-controlled; no public page references the visual-editing chunk)
 
 **Verification:**
-- [ ] Tests pass: `pnpm test` (client stega on/off; layout renders `VisualEditing` only in draft mode; Footer label with a stega-encoded `"x"`)
-- [ ] Build succeeds: `pnpm build`
+- [x] Tests pass: `pnpm test` (web 51, studio 23)
+- [x] Build succeeds: `pnpm build`
 - [ ] Manual: overlays + live refresh on the deploy preview; `curl` public page and check for zero-width characters
 
 **Dependencies:** Task 1
 
-**Files likely touched:**
-- `web/lib/sanity/client.ts`
-- `web/lib/sanity/client.test.ts`
+**Files touched:**
+- `web/lib/sanity/client.ts` + test
 - `web/app/layout.tsx`
-- `web/components/Footer.tsx`
-- `web/components/Footer.test.tsx` (new)
+- `web/components/VisualEditingInDraftMode.tsx` + test (new; keeps the draft-mode gate testable)
+- `web/components/Footer.tsx` + `Footer.test.tsx` (new)
+
+**Plan change:** shipped in the same PR as Task 1 (#10) so testing reuses the deploy-preview CORS origin already allowed.
 
 **Estimated scope:** Medium (5 files)
 
