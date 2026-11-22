@@ -10,14 +10,14 @@ One PR per task (1–4). Task 5 is manual.
 **Description:** Add `/api/draft-mode/enable` using `defineEnableDraftMode` with the server-side preview client, add `presentationTool` to the studio with `previewUrl` pointing at the site and `previewMode.enable` at the new route, and pair studio deploy previews with the matching site deploy preview so the PR can be tested end-to-end on Netlify. Old `/api/preview` stays for now.
 
 **Acceptance criteria:**
-- [ ] Studio shows a Presentation tab that loads the site in draft mode (draft banner visible, unpublished edits shown after reload)
+- [x] Studio shows a Presentation tab that loads the site in draft mode (draft banner visible, unpublished edits shown after reload)
 - [x] `/api/draft-mode/enable` rejects missing/invalid secrets and never enables draft mode for them (tests + local `next start`: 401, no cookies)
 - [x] Studio deploy previews point Presentation at the same PR's site deploy preview (`resolvePreviewOrigin`, tested)
 
 **Verification:**
 - [x] Tests pass: `pnpm test` (web 44, studio 23)
 - [x] Build succeeds: `pnpm build` and `pnpm sanity:build`
-- [ ] Manual (local): `pnpm dev` + `pnpm sanity` → Presentation works; confirms read token can validate secrets (needs a logged-in editor; token itself verified valid)
+- [x] Manual (local): `pnpm dev` + `pnpm sanity` → Presentation works; confirms read token can validate secrets (needs a logged-in editor; token itself verified valid)
 - [x] Manual (Checkpoint A): draft banner shows inside Presentation in **Chrome and Firefox** (2026-11-21). Safari: not supported for editing (owner decision).
 
 **Dependencies:** None
@@ -39,14 +39,14 @@ One PR per task (1–4). Task 5 is manual.
 **Description:** Enable stega on the preview client only (`studioUrl` from `NEXT_PUBLIC_SANITY_STUDIO_URL`), render `<VisualEditing />` in the root layout only in draft mode, and clean stega from logic fields (`Footer` platform).
 
 **Acceptance criteria:**
-- [ ] In Presentation, clicking Sanity-driven text focuses that document/field
-- [ ] Editing a field updates the preview without a manual reload
+- [x] In Presentation, clicking Sanity-driven text focuses that document/field
+- [x] Editing a field updates the preview without a manual reload
 - [x] Published client has stega off; public HTML contains no stega characters (0/18 built pages; scan positive-controlled; no public page references the visual-editing chunk)
 
 **Verification:**
 - [x] Tests pass: `pnpm test` (web 51, studio 23)
 - [x] Build succeeds: `pnpm build`
-- [ ] Manual: overlays + live refresh on the deploy preview; `curl` public page and check for zero-width characters
+- [x] Manual: overlays + live refresh on the deploy preview; `curl` public page and check for zero-width characters
 
 **Dependencies:** Task 1
 
@@ -103,8 +103,8 @@ One PR per task (1–4). Task 5 is manual.
 **Description:** Delete `/api/preview` and its tests, delete `studio/lib/preview.ts` + tests and the `document.actions` hook. Keep `/api/exit-preview`.
 
 **Acceptance criteria:**
-- [ ] `/api/preview` returns 404 on the deploy preview
-- [ ] No "Open Preview" document action in Studio
+- [x] `/api/preview` returns 404 on the deploy preview
+- [x] No "Open Preview" document action in Studio
 - [x] No reference to `SANITY_PREVIEW_SECRET` / `SANITY_STUDIO_PREVIEW_SECRET` in the repo (outside spec/tasks history); built `studio/dist` contains no preview secret or `/api/preview`
 
 **Verification:**
@@ -127,11 +127,11 @@ One PR per task (1–4). Task 5 is manual.
 
 ## Task 5 (manual, you): Env cleanup and production verification
 
-- [ ] Netlify **site**: add `NEXT_PUBLIC_SANITY_STUDIO_URL=https://w-and-m-electric-studio.netlify.app`; remove `SANITY_PREVIEW_SECRET`
-- [ ] Netlify **studio**: confirm `SANITY_STUDIO_PREVIEW_URL=https://w-and-m-electric.netlify.app`; remove `SANITY_PREVIEW_SECRET`
-- [ ] Local `web/.env.local` and `studio/.env`: same changes
-- [ ] Production: Presentation works on the live studio; private-window public site is clean
-- [ ] Close #7 with verification notes
+- [x] Netlify **site**: add `NEXT_PUBLIC_SANITY_STUDIO_URL=https://w-and-m-electric-studio.netlify.app`; remove `SANITY_PREVIEW_SECRET`
+- [x] Netlify **studio**: confirm `SANITY_STUDIO_PREVIEW_URL=https://w-and-m-electric.netlify.app`; remove `SANITY_PREVIEW_SECRET`
+- [x] Local `web/.env.local` and `studio/.env`: same changes
+- [x] Production: Presentation works on the live studio; private-window public site is clean
+- [x] Close #7 with verification notes
 
 ## Checkpoint C: Complete
-- [ ] All spec success criteria met
+- [x] All spec success criteria met
