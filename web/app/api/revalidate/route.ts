@@ -6,43 +6,26 @@ const SECRET = process.env.REVALIDATE_SECRET;
 
 type RevalidatePayload = {
   _type?: string;
-  slug?: {
-    current?: string;
-  };
 };
 
-// Page-copy singletons are each read by exactly one route.
-const singletonPagePaths: Record<string, string> = {
-  homePage: "/",
-  aboutPage: "/about",
-  contactPage: "/contact",
-  servicesPage: "/services",
-  serviceAreasPage: "/service-areas",
-  galleryPage: "/gallery",
-};
-
-function getPathsForPayload(payload: RevalidatePayload) {
-  const slug = payload.slug?.current;
-
-  if (payload._type && Object.hasOwn(singletonPagePaths, payload._type)) {
-    return [singletonPagePaths[payload._type]];
-  }
-
-  switch (payload._type) {
-    case "siteSettings":
-      return ["/", "/about", "/contact", "/services", "/service-areas", "/gallery"];
-    case "service":
-      return slug ? ["/", "/services", `/services/${slug}`, "/service-areas"] : ["/", "/services", "/service-areas"];
-    case "serviceArea":
-      return slug ? ["/", "/service-areas", `/service-areas/${slug}`] : ["/", "/service-areas"];
-    case "project":
-      return slug ? ["/", "/gallery", `/gallery/${slug}`] : ["/", "/gallery"];
-    case "testimonial":
-      return ["/", "/about", "/services"];
-    default:
-      return null;
-  }
-}
+// Document types the Sanity webhook sends (its filter lists the same 11).
+// Pages read many types each (services appear on nearly every page through
+// references; site settings through the layout), so a per-type path list
+// drifted out of date (#11). Instead, any publish refreshes the whole site:
+// ~21 pages, each regenerated on its next request.
+const SUPPORTED_TYPES = new Set([
+  "siteSettings",
+  "homePage",
+  "aboutPage",
+  "contactPage",
+  "servicesPage",
+  "serviceAreasPage",
+  "galleryPage",
+  "service",
+  "serviceArea",
+  "project",
+  "testimonial",
+]);
 
 export async function POST(request: Request) {
   if (!SECRET) {
@@ -70,18 +53,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Invalid JSON payload" }, { status: 400 });
   }
 
-  const paths = getPathsForPayload(payload);
-  if (!paths) {
+  const type = payload._type;
+  if (!type || !SUPPORTED_TYPES.has(type)) {
     return NextResponse.json({ message: "Unsupported document type" }, { status: 400 });
   }
 
-  if (payload._type === "siteSettings") {
+  // Site settings are also held in an unstable_cache entry tagged "siteSettings".
+  if (type === "siteSettings") {
     revalidateTag("siteSettings", "default");
   }
 
-  paths.forEach((path) => revalidatePath(path));
+  revalidatePath("/", "layout");
 
-  return NextResponse.json({ revalidated: true, paths });
+  return NextResponse.json({ revalidated: true, type });
 }
-
-export { getPathsForPayload };
