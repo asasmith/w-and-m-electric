@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { hideServicesOffered, validateServicesOffered } from "../lib/serviceAreaRules";
 
 export default defineType({
   name: "serviceArea",
@@ -6,9 +7,12 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
+      // Kept as "townName" so existing documents need no migration; an area
+      // can be any place: a town, a county or a region.
       name: "townName",
-      title: "Town Name",
+      title: "Area Name",
       type: "string",
+      description: "A town, county or region, e.g. “Towson”, “Carroll County” or “South Central PA”.",
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -20,15 +24,18 @@ export default defineType({
     }),
     defineField({
       name: "county",
-      title: "County",
+      title: "Region / County (optional)",
       type: "string",
-      validation: (rule) => rule.required(),
+      description: "Shown under the area name, e.g. “Baltimore County” or “Maryland”. Leave empty if the name says it all.",
     }),
     defineField({
+      // Hidden from editors and unused by the site. Kept so existing values
+      // aren't lost and so they're available if we later add a real map,
+      // "find the nearest service area" or distance-based response times.
       name: "coordinates",
       title: "Coordinates",
       type: "geopoint",
-      validation: (rule) => rule.required(),
+      hidden: true,
     }),
     defineField({
       name: "localIntro",
@@ -36,6 +43,13 @@ export default defineType({
       type: "text",
       rows: 5,
       validation: (rule) => rule.required().max(600),
+    }),
+    defineField({
+      name: "offersAllServices",
+      title: "Offers all services",
+      type: "boolean",
+      description: "On: this area lists every service, including ones added later. Turn off to pick specific services.",
+      initialValue: true,
     }),
     defineField({
       name: "servicesOffered",
@@ -47,7 +61,8 @@ export default defineType({
           to: [{ type: "service" }],
         },
       ],
-      validation: (rule) => rule.required().min(1),
+      hidden: hideServicesOffered,
+      validation: (rule) => rule.custom(validateServicesOffered),
     }),
     defineField({
       name: "responseTime",
@@ -62,7 +77,7 @@ export default defineType({
     prepare({ title, subtitle }) {
       return {
         title: title || "Service Area",
-        subtitle: subtitle ? `${subtitle} County` : "",
+        subtitle: subtitle || "",
       };
     },
   },

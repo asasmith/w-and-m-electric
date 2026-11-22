@@ -125,8 +125,6 @@ export const fallbackServiceAreasPage: ServiceAreasPageContent = {
   heroEyebrow: "Service areas",
   heroHeadline: "Local electrical service pages built around the towns we actually cover.",
   heroBody: "W&M Electrical serves central Maryland communities with fast scheduling, practical troubleshooting, and town-specific landing pages built around real local coverage.",
-  mapTitle: "Service area map",
-  mapDescription: "Static map showing current W&M Electrical town coverage across Carroll County, Baltimore County, Baltimore City, and Howard County.",
 };
 
 export const fallbackGalleryPage: GalleryPageContent = {
@@ -210,42 +208,46 @@ export const fallbackServiceDetails: Service[] = [
   },
 ];
 
+// Every fallback area offers every service, matching the "Offers all
+// services" default.
+const allFallbackServiceLinks = fallbackServices.map(({ _id, title, slug }) => ({ _id, title, slug }));
+
 export const fallbackServiceAreas: ServiceAreaListItem[] = [
   {
     _id: "area-eldersburg",
     _type: "serviceArea",
     townName: "Eldersburg",
     slug: { current: "eldersburg-md" },
-    county: "Carroll",
+    county: "Carroll County",
     responseTime: "Same-day scheduling available",
-    coordinates: { lat: 39.4037, lng: -76.9508 },
+    servicesOffered: allFallbackServiceLinks,
   },
   {
     _id: "area-westminster",
     _type: "serviceArea",
     townName: "Westminster",
     slug: { current: "westminster-md" },
-    county: "Carroll",
+    county: "Carroll County",
     responseTime: "Rapid dispatch for urgent calls",
-    coordinates: { lat: 39.5754, lng: -76.9958 },
+    servicesOffered: allFallbackServiceLinks,
   },
   {
     _id: "area-towson",
     _type: "serviceArea",
     townName: "Towson",
     slug: { current: "towson-md" },
-    county: "Baltimore",
+    county: "Baltimore County",
     responseTime: "Flexible residential and commercial service windows",
-    coordinates: { lat: 39.4015, lng: -76.6019 },
+    servicesOffered: allFallbackServiceLinks,
   },
   {
     _id: "area-owings-mills",
     _type: "serviceArea",
     townName: "Owings Mills",
     slug: { current: "owings-mills-md" },
-    county: "Baltimore",
+    county: "Baltimore County",
     responseTime: "Available for planned work and electrical troubleshooting",
-    coordinates: { lat: 39.4196, lng: -76.7803 },
+    servicesOffered: allFallbackServiceLinks,
   },
   {
     _id: "area-baltimore",
@@ -254,16 +256,16 @@ export const fallbackServiceAreas: ServiceAreaListItem[] = [
     slug: { current: "baltimore-md" },
     county: "Baltimore City",
     responseTime: "Fast service windows for city residential and mixed-use properties",
-    coordinates: { lat: 39.2904, lng: -76.6122 },
+    servicesOffered: allFallbackServiceLinks,
   },
   {
     _id: "area-columbia",
     _type: "serviceArea",
     townName: "Columbia",
     slug: { current: "columbia-md" },
-    county: "Howard",
+    county: "Howard County",
     responseTime: "Responsive scheduling for upgrades, repairs, and troubleshooting",
-    coordinates: { lat: 39.2037, lng: -76.861 },
+    servicesOffered: allFallbackServiceLinks,
   },
 ];
 
@@ -271,32 +273,32 @@ export const fallbackServiceAreaDetails: ServiceArea[] = [
   {
     ...fallbackServiceAreas[0],
     localIntro: "Homeowners in Eldersburg often need dependable electrical work for expanding household loads, service upgrades, and repair calls that cannot drag out for days. We schedule around that reality.",
-    servicesOffered: [fallbackServices[0], fallbackServices[1], fallbackServices[2]],
+    servicesOffered: fallbackServices,
   },
   {
     ...fallbackServiceAreas[1],
     localIntro: "Westminster projects often mix older electrical infrastructure with newer equipment demands, so the work needs to be practical, readable, and planned around how the property actually operates.",
-    servicesOffered: [fallbackServices[1], fallbackServices[2], fallbackServices[3]],
+    servicesOffered: fallbackServices,
   },
   {
     ...fallbackServiceAreas[2],
     localIntro: "Towson service calls range from residential troubleshooting to light commercial electrical work where response speed and clean communication are just as important as the repair itself.",
-    servicesOffered: [fallbackServices[0], fallbackServices[1], fallbackServices[3]],
+    servicesOffered: fallbackServices,
   },
   {
     ...fallbackServiceAreas[3],
     localIntro: "Owings Mills customers call for repairs, service upgrades, and lighting work where safety, speed, and readable recommendations matter more than padded estimates.",
-    servicesOffered: [fallbackServices[0], fallbackServices[1], fallbackServices[2]],
+    servicesOffered: fallbackServices,
   },
   {
     ...fallbackServiceAreas[4],
     localIntro: "Baltimore properties often need electrical work that respects older building conditions while still solving modern load, safety, and reliability problems without overcomplicating the scope.",
-    servicesOffered: [fallbackServices[1], fallbackServices[2], fallbackServices[3]],
+    servicesOffered: fallbackServices,
   },
   {
     ...fallbackServiceAreas[5],
     localIntro: "Columbia homeowners and businesses need straightforward electrical support for upgrades, lighting, troubleshooting, and service calls that stay organized from estimate to completion.",
-    servicesOffered: [fallbackServices[0], fallbackServices[2], fallbackServices[3]],
+    servicesOffered: fallbackServices,
   },
 ];
 
