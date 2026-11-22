@@ -72,7 +72,9 @@ export default async function ServiceAreaDetailPage({ params }: ServiceAreaDetai
           <div className="notched-card border border-steel/35 bg-paper p-6">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-copper">Response expectations</p>
             <p className="mt-5 text-xl leading-8">{serviceArea.responseTime}</p>
-            <p className="mt-5 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">{serviceArea.county} County coverage</p>
+            {serviceArea.county ? (
+              <p className="mt-5 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-steel">{serviceArea.county} coverage</p>
+            ) : null}
           </div>
 
           <div>

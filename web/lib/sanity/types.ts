@@ -123,8 +123,6 @@ export type ServiceAreasPageContent = {
   heroEyebrow: string;
   heroHeadline: string;
   heroBody: string;
-  mapTitle: string;
-  mapDescription: string;
 };
 
 export type GalleryPageContent = {
@@ -150,20 +148,20 @@ export type Service = ServiceListItem & {
   body: PortableTextBlock[];
 };
 
+// A service area can be any place: a town, a county or a region.
 export type ServiceAreaListItem = {
   _id: string;
   _type: "serviceArea";
+  /** The area's display name (field kept as townName for existing data). */
   townName: string;
   slug: SanitySlug;
-  county: string;
+  /** Optional region or county shown under the name, e.g. "Carroll County". */
+  county?: string;
   responseTime: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
+  servicesOffered: Array<Pick<ServiceListItem, "_id" | "title" | "slug">>;
 };
 
-export type ServiceArea = ServiceAreaListItem & {
+export type ServiceArea = Omit<ServiceAreaListItem, "servicesOffered"> & {
   localIntro: string;
   servicesOffered: ServiceListItem[];
 };

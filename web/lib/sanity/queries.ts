@@ -121,9 +121,7 @@ const serviceAreasPageQuery = `*[_type == "serviceAreasPage"][0]{
   _type,
   heroEyebrow,
   heroHeadline,
-  heroBody,
-  mapTitle,
-  mapDescription
+  heroBody
 }`;
 
 const galleryPageQuery = `*[_type == "galleryPage"][0]{
@@ -180,6 +178,17 @@ const serviceBySlugQuery = `*[_type == "service" && slug.current == $slug][0]{
   }
 }`;
 
+// The services an area offers, resolved in one place so pages never care how
+// the list was chosen. "Offers all services" (on by default, and assumed for
+// areas created before the switch existed) lists every service, including ones
+// added later; turning it off uses the editor's hand-picked list.
+function servicesOfferedProjection(fields: string) {
+  return `"servicesOffered": select(
+    offersAllServices == false => servicesOffered[]->{${fields}},
+    *[_type == "service"] | order(orderRank asc){${fields}}
+  )`;
+}
+
 const serviceAreaListQuery = `*[_type == "serviceArea"] | order(townName asc){
   _id,
   _type,
@@ -187,10 +196,7 @@ const serviceAreaListQuery = `*[_type == "serviceArea"] | order(townName asc){
   slug,
   county,
   responseTime,
-  coordinates{
-    lat,
-    lng
-  }
+  ${servicesOfferedProjection("_id, title, slug")}
 }`;
 
 const serviceAreaSlugsQuery = `*[_type == "serviceArea" && defined(slug.current)][]{
@@ -205,11 +211,7 @@ const serviceAreaBySlugQuery = `*[_type == "serviceArea" && slug.current == $slu
   county,
   responseTime,
   localIntro,
-  coordinates{
-    lat,
-    lng
-  },
-  servicesOffered[]->{
+  ${servicesOfferedProjection(`
     _id,
     _type,
     title,
@@ -228,7 +230,7 @@ const serviceAreaBySlugQuery = `*[_type == "serviceArea" && slug.current == $slu
       },
       alt
     }
-  }
+  `)}
 }`;
 
 const projectsQuery = `*[_type == "project"] | order(completedDate desc){

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SanityImage from "@/components/SanityImage";
-import ServiceAreaCoverageMap from "@/components/ServiceAreaCoverageMap";
+import ServiceAreaList from "@/components/ServiceAreaList";
 import {
   fallbackHomePage,
   fallbackProjects,
@@ -52,7 +52,7 @@ export default async function HomePage() {
 
     siteSettings = settingsData ?? fallbackSiteSettings;
     services = servicesData.length ? servicesData.slice(0, 4) : fallbackServices;
-    serviceAreas = areasData.length ? areasData.slice(0, 4) : fallbackServiceAreas;
+    serviceAreas = areasData.length ? areasData : fallbackServiceAreas;
     projects = projectsData.length ? projectsData.slice(0, 2) : fallbackProjects;
     testimonials = testimonialsData.length ? testimonialsData.slice(0, 3) : fallbackTestimonials;
     pageContent = homePageData ?? fallbackHomePage;
@@ -210,20 +210,9 @@ export default async function HomePage() {
             <p className="mt-6 max-w-xl text-lg leading-8 text-ink/72">
               {pageContent.serviceAreasBody}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {serviceAreas.map((area) => (
-                <Link key={area._id} className="border border-steel/35 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-ink transition hover:border-copper hover:text-copper" href={`/service-areas/${area.slug.current}`}>
-                  {area.townName}
-                </Link>
-              ))}
-            </div>
           </div>
 
-          <ServiceAreaCoverageMap
-            description="Stylized static map showing service coverage across Carroll County, Baltimore County, Baltimore City, and Howard County."
-            serviceAreas={serviceAreas}
-            title="W&M Electrical coverage map"
-          />
+          <ServiceAreaList serviceAreas={serviceAreas} variant="compact" />
         </div>
       </section>
 
